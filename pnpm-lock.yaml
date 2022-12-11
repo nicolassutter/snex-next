@@ -18,6 +18,7 @@ specifiers:
   classnames: ^2.3.2
   concurrently: ^7.6.0
   daisyui: ^2.43.0
+  env-cmd: ^10.1.0
   eslint: ^8.29.0
   eslint-config-alsacreations: ^0.2.0
   eslint-plugin-prettier: ^4.2.1
@@ -74,6 +75,7 @@ devDependencies:
   autoprefixer: 10.4.13_postcss@8.4.20
   concurrently: 7.6.0
   daisyui: 2.43.0_63gb4bqnxhe4g6pce5lz6sagrm
+  env-cmd: 10.1.0
   eslint: 8.29.0
   eslint-config-alsacreations: 0.2.0_ha6vam6werchizxrnqvarmz2zu
   eslint-plugin-prettier: 4.2.1_wdw3qg4p7crmsoaizcyntelyni
@@ -3588,6 +3590,11 @@ packages:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
     dev: true
 
+  /commander/4.1.1:
+    resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
+    engines: {node: '>= 6'}
+    dev: true
+
   /commander/9.4.1:
     resolution: {integrity: sha512-5EEkTNyHNGFPD2H+c/dXXfQZYa/scCKasxWcXJaWnNJ99pnQN9Vnmqow+p+PlFPE63Q6mThaZws1T+HxfpgtPw==}
     engines: {node: ^12.20.0 || >=14}
@@ -4559,6 +4566,15 @@ packages:
     resolution: {integrity: sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==}
     engines: {node: '>=0.12'}
     dev: false
+
+  /env-cmd/10.1.0:
+    resolution: {integrity: sha512-mMdWTT9XKN7yNth/6N6g2GuKuJTsKMDHlQFUDacb/heQRRWOTIZ42t1rMHnQu4jYxU1ajdTeJM+9eEETlqToMA==}
+    engines: {node: '>=8.0.0'}
+    hasBin: true
+    dependencies:
+      commander: 4.1.1
+      cross-spawn: 7.0.3
+    dev: true
 
   /env-paths/2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}

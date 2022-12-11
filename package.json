@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "netlify": "netlify functions:serve",
+    "netlify": "env-cmd --file .env netlify functions:serve",
     "lint:js": "eslint --ext .js,.ts,.tsx --ignore-path .gitignore ."
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
     "daisyui": "^2.43.0",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.29.0",
     "eslint-config-alsacreations": "^0.2.0",
     "eslint-plugin-prettier": "^4.2.1",
