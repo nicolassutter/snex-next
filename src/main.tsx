@@ -1,4 +1,10 @@
 import { render } from 'preact'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { App } from './app'
 
-render(<App />, document.getElementById('app') as HTMLElement)
+render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById('app') as HTMLElement,
+)
