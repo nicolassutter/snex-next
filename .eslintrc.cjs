@@ -33,11 +33,13 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-extra-semi': 'off',
     'unicorn/prefer-type-error': 'off',
     'unicorn/error-message': 'off',
     '@typescript-eslint/brace-style': ['error', '1tbs'],
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-undef': 'off',
     'space-before-function-paren': 'off',
+    'react/prop-types': 'off',
   },
 }
