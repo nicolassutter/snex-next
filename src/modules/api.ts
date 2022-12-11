@@ -3,10 +3,7 @@ import { default as _axios } from 'axios'
 
 const suffix = '/.netlify/functions/api'
 
-const API_URL =
-  process.env.NODE_ENV === 'production'
-    ? suffix
-    : `http://localhost:8888${suffix}`
+const API_URL = import.meta.env.PROD ? suffix : `http://localhost:8888${suffix}`
 
 const axios = _axios.create({
   baseURL: API_URL,
@@ -23,16 +20,16 @@ interface Options {
 }
 
 export const api = {
-  getPopularMovies(): Promise<Movie[]> {
-    return axios.get('/movies/popular')
+  getPopularMovies() {
+    return axios.get<{ results: Movie[] }>('/movie/popular')
   },
 
   getTopMovies(): Promise<Movie[]> {
-    return axios.get('/movies/top_rated')
+    return axios.get('/movie/top_rated')
   },
 
   getUpcomingMovies(): Promise<Movie[]> {
-    return axios.get('/movies/upcoming')
+    return axios.get('/movie/upcoming')
   },
 
   getPopularShows(): Promise<Show[]> {
