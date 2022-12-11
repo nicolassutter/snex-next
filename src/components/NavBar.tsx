@@ -1,19 +1,15 @@
+import { Link } from 'react-router-dom'
+
 export function NavBar() {
   return (
     <nav className="navbar bg-base-100">
       <div className="flex-1">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="btn btn-ghost text-3xl tracking-widest uppercase"
         >
           SNE<span className="text-blue-500">X</span>
-        </a>
-        <a
-          href="/settings"
-          className="btn btn-ghost text-3xl tracking-widest uppercase"
-        >
-          temp settings
-        </a>
+        </Link>
       </div>
 
       <div className="flex-none gap-2">
