@@ -17,7 +17,7 @@ export function NavBar() {
       <div className='flex-1'>
         <Link
           to='/'
-          className='btn btn-ghost text-3xl tracking-widest uppercase'
+          className='text-3xl tracking-widest uppercase'
         >
           SNE<span className='text-blue-500'>X</span>
         </Link>
