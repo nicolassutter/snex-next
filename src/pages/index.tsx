@@ -61,6 +61,17 @@ function Index() {
                   enabled: true,
                   forceToAxis: true,
                 }}
+                breakpoints={{
+                  0: { slidesPerView: 1 },
+                  // when window width is >= 320px
+                  320: { slidesPerView: 2 },
+                  // when window width is >= 640px
+                  640: { slidesPerView: 4 },
+                  // when window width is >= 768px
+                  768: { slidesPerView: 5 },
+                  // when window width is >= 1024px
+                  1024: { slidesPerView: 6 },
+                }}
               >
                 {items.map((item) => (
                   <SwiperSlide
