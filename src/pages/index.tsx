@@ -1,77 +1,96 @@
-import type { Movie } from '#types'
 import { PosterCard } from '#src/components/PosterCard'
-import { api } from '#src/modules/api'
-import { makePromise } from '#src/utils/index'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
+import { useStore } from '@nanostores/preact'
+import {
+  hasFetchedMoviesAtom,
+  moviesStore,
+  populateMoviesStore,
+} from '#src/stores/moviesStore'
+import { hasFetchedTvAtom, populateTvStore, tvStore } from '#src/stores/tvStore'
+import { useLocalStorage } from 'react-use'
 
 function Index() {
-  const results = useSignal([
-    {
-      key: 'top_rated',
-      label: 'Top rated movies',
-      items: [] as Movie[],
-    } as const,
-    {
-      key: 'popular',
-      label: 'Popular movies',
-      items: [] as Movie[],
-    } as const,
-  ])
+  const [lastIndexFetchTime, setLastIndexFetchTime] = useLocalStorage(
+    'last-index-fetch',
+    new Date().getTime(),
+  )
 
-  function updateResults(key: string, newValue: Movie[]) {
-    const resultIndex = results.value.findIndex((res) => res.key === key)
-
-    if (resultIndex !== -1) {
-      const resultsCopy = JSON.parse(JSON.stringify(results.value))
-      resultsCopy[resultIndex].items = newValue
-      results.value = resultsCopy
-    }
-  }
+  const moviesState = useStore(moviesStore)
+  const showsState = useStore(tvStore)
 
   useEffectOnce(() => {
-    makePromise(async () => {
-      const [popularResults, topResults] = await Promise.all([
-        api.getPopularMovies(),
-        api.getTopMovies(),
-      ])
+    const now = new Date().getTime()
 
-      updateResults('popular', popularResults.data?.results ?? [])
-      updateResults('top_rated', topResults.data?.results ?? [])
-    })
+    // 10 minutes in ms
+    const minutesInMs = 10 * 60 * 1000
+
+    /**
+     * Fetches data only if it has been more than 10 minutes since last call
+     * OR
+     * If aby store is empty
+     */
+    if (
+      (lastIndexFetchTime && now - lastIndexFetchTime > minutesInMs) ||
+      hasFetchedTvAtom.get() === false ||
+      hasFetchedMoviesAtom.get() === false
+    ) {
+      populateMoviesStore()
+      populateTvStore()
+      setLastIndexFetchTime(new Date().getTime())
+      hasFetchedTvAtom.set(true)
+      hasFetchedMoviesAtom.set(true)
+    }
+  })
+
+  const globalState = computed(() => {
+    const _movies = Object.entries(moviesState).map(([key, value]) => ({
+      ...value,
+      key: `movies_${key}`,
+    }))
+
+    const _shows = Object.entries(showsState).map(([key, value]) => ({
+      ...value,
+      key: `shows_${key}`,
+    }))
+
+    return [..._movies, ..._shows]
   })
 
   return (
     <div className='index-page p-2'>
-      {results.value.map((result) => (
-        <div
-          className='banner mt-5 first:mt-0'
-          key={result.key}
-        >
-          <h2 className='text-3xl font-bold'>{result.label}</h2>
+      {globalState.value.map(
+        ({ key, items, label }) =>
+          items.length > 0 && (
+            <div
+              className='banner mt-10 first:mt-0'
+              key={key}
+            >
+              <h2 className='text-3xl font-bold'>{label}</h2>
 
-          <Swiper
-            spaceBetween={25}
-            slidesPerView={7}
-            className='mt-5'
-          >
-            {result.items.map((movie) => (
-              <SwiperSlide
-                key={movie.id}
-                className='h-[unset] w-28'
+              <Swiper
+                spaceBetween={25}
+                slidesPerView={7}
+                className='mt-5'
               >
-                <PosterCard
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  className='h-full'
-                  imgAttrs={{
-                    className: 'h-full',
-                  }}
-                ></PosterCard>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      ))}
+                {items.map((item) => (
+                  <SwiperSlide
+                    key={item.id}
+                    className='h-[unset] w-28'
+                  >
+                    <PosterCard
+                      src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                      className='h-full'
+                      imgAttrs={{
+                        className: 'h-full',
+                      }}
+                    ></PosterCard>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          ),
+      )}
     </div>
   )
 }
