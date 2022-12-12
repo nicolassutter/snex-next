@@ -34,27 +34,31 @@ export function NavBar() {
 
         <div className='flex-none'>
           <Menu>
-            {({ open }: { open: boolean }) => (
-              <div className='dropdown'>
+            {() => (
+              <div className='ui-dropdown'>
                 <Menu.Button className='btn'>
                   {() => <IconMenu></IconMenu>}
                 </Menu.Button>
 
-                {open && (
-                  <ul className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 right-0'>
-                    <Menu.Items>
-                      {items.value.map((item) => (
-                        <Menu.Item key={item._key}>
-                          {() => (
-                            <li>
-                              <Link to={item.to}>{item.title}</Link>
-                            </li>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </ul>
-                )}
+                <Menu.Items className='ui-dropdown-panel right-0'>
+                  {items.value.map((item) => (
+                    <Menu.Item key={item._key}>
+                      {
+                        // @ts-expect-error Seems like the lib isn't correctly typed
+                        ({ active }) => (
+                          <Link
+                            className={classnames('ui-dropdown-item', {
+                              active,
+                            })}
+                            to={item.to}
+                          >
+                            {item.title}
+                          </Link>
+                        )
+                      }
+                    </Menu.Item>
+                  ))}
+                </Menu.Items>
               </div>
             )}
           </Menu>

@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ui-dropdown {
+  position: relative;
+}
+
+.ui-dropdown-panel {
+  position: absolute;
+  top: 100%;
+  padding: theme('spacing.2');
+  background-color: theme('colors.neutral');
+  width: theme('spacing.52');
+
+  @apply shadow rounded-box;
+}
+
+.ui-dropdown-item {
+  @apply transition-colors rounded-lg;
+
+  width: 100%;
+  display: flex;
+  padding: theme('spacing.2');
+
+  &.active {
+    background-color: theme('colors.base-100');
+  }
+}
