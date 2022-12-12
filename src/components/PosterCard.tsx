@@ -18,9 +18,13 @@ export const PosterCard: FunctionComponent<Props> = ({
     <div className={classnames('poster-card', className)}>
       <img
         {...imgAttrs}
-        className={classnames(classesInAttrs(imgAttrs), 'aspect-[2/3]')}
+        className={classnames(
+          classesInAttrs(imgAttrs),
+          'aspect-[2/3] object-cover select-none rounded-md',
+        )}
         src={src}
         alt={alt}
+        draggable={false}
         loading='lazy'
       />
     </div>
