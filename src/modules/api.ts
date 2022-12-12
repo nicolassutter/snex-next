@@ -24,8 +24,8 @@ export const api = {
     return axios.get<{ results: Movie[] }>('/movie/popular')
   },
 
-  getTopMovies(): Promise<Movie[]> {
-    return axios.get('/movie/top_rated')
+  getTopMovies() {
+    return axios.get<{ results: Movie[] }>('/movie/top_rated')
   },
 
   getUpcomingMovies(): Promise<Movie[]> {
