@@ -1,4 +1,4 @@
-import type { Movie, Show } from '../../types'
+import type { Movie, Show } from '#types'
 import { default as _axios } from 'axios'
 
 const suffix = '/.netlify/functions/api'

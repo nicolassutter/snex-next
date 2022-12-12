@@ -1,5 +1,5 @@
+import { classesInAttrs } from '#src/utils/index'
 import type { JSX, FunctionComponent } from 'preact'
-import { attrsWithClasses } from '../utils'
 
 interface Props {
   src: string
@@ -17,9 +17,11 @@ export const PosterCard: FunctionComponent<Props> = ({
   return (
     <div className={classnames('poster-card', className)}>
       <img
+        {...imgAttrs}
+        className={classnames(classesInAttrs(imgAttrs), 'aspect-[2/3]')}
         src={src}
         alt={alt}
-        {...attrsWithClasses(imgAttrs, 'custom-class')}
+        loading='lazy'
       />
     </div>
   )

@@ -1,42 +1,63 @@
 import { Link } from 'react-router-dom'
+import { v4 as uuid } from 'uuid'
+import { Menu } from '@headlessui/react'
+import IconMenu from '~icons/carbon/overflow-menu-horizontal'
 
 export function NavBar() {
+  const items = useSignal([
+    {
+      _key: uuid(),
+      title: 'Settings',
+      to: '/settings',
+    },
+  ])
+
   return (
-    <nav className="navbar bg-base-100">
-      <div className="flex-1">
+    <nav className='navbar bg-base-100'>
+      <div className='flex-1'>
         <Link
-          to="/"
-          className="btn btn-ghost text-3xl tracking-widest uppercase"
+          to='/'
+          className='btn btn-ghost text-3xl tracking-widest uppercase'
         >
-          SNE<span className="text-blue-500">X</span>
+          SNE<span className='text-blue-500'>X</span>
         </Link>
       </div>
 
-      <div className="flex-none gap-2">
-        <div className="form-control">
+      <div className='flex-none gap-2'>
+        <div className='form-control'>
           <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered"
+            type='text'
+            placeholder='Search'
+            className='input input-bordered'
           />
         </div>
 
-        <div className="flex-none">
-          <button className="btn btn-square btn-ghost">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-5 h-5 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-              ></path>
-            </svg>
-          </button>
+        <div className='flex-none'>
+          <Menu>
+            {({ open }: { open: boolean }) => (
+              <div className='dropdown'>
+                <Menu.Button className='btn'>
+                  {() => <IconMenu></IconMenu>}
+                </Menu.Button>
+
+                {open && (
+                  <ul className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 right-0'>
+                    <Menu.Items>
+                      {items.value.map((item) => (
+                        <Menu.Item key={item._key}>
+                          {() => (
+                            <li>
+                              <Link to={item.to}>{item.title}</Link>
+                            </li>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </ul>
+                )}
+              </div>
+            )}
+          </Menu>
         </div>
       </div>
     </nav>

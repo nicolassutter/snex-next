@@ -1,22 +1,11 @@
-import { omit } from 'lodash-es'
 import type { JSX } from 'preact'
 
-/**
- * Simple function to merge attributes and classes
- *
- * @example <img {...attrsWithClasses(attrs, 'custom-class')} />
- */
-export function attrsWithClasses<
-  T extends Partial<JSX.HTMLAttributes<any>> | undefined,
->(attrs: T, customClasses?: string) {
-  const classes = classnames(
-    attrs?.class ?? '',
-    attrs?.className ?? '',
-    customClasses,
-  )
+export async function makePromise<T extends (...args: any[]) => Promise<any>>(
+  cb: T,
+) {
+  return cb()
+}
 
-  return {
-    ...omit(attrs, 'class', 'className'),
-    className: classes,
-  }
+export function classesInAttrs(attrs?: JSX.HTMLAttributes<any>) {
+  return classnames(attrs?.class, attrs?.className)
 }
