@@ -1,5 +1,6 @@
 import { PosterCard } from '#src/components/PosterCard'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { A11y, Mousewheel } from 'swiper'
 import 'swiper/css'
 import { useStore } from '@nanostores/preact'
 import {
@@ -53,9 +54,13 @@ function Index() {
               <h2 className='text-3xl font-bold'>{label}</h2>
 
               <Swiper
-                spaceBetween={25}
-                slidesPerView={7}
+                modules={[A11y, Mousewheel]}
+                spaceBetween={15}
                 className='mt-5'
+                mousewheel={{
+                  enabled: true,
+                  forceToAxis: true,
+                }}
               >
                 {items.map((item) => (
                   <SwiperSlide
