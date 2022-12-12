@@ -1,32 +1,50 @@
 import { api } from '#src/modules/api'
-import type { Show } from '#types'
+import type { Movie, Show } from '#types'
 import { set } from 'lodash-es'
 import { action, atom, map } from 'nanostores'
 
-export const hasFetchedTvAtom = atom(false)
+export const hasFetchedAtom = atom(false)
 
-export const tvStore = map({
-  popular: {
+export const indexStore = map({
+  upcoming_movies: {
+    fn: () => api.getUpcomingMovies(),
+    items: [] as Movie[],
+    label: 'Upcoming movies',
+  },
+
+  popular_movies: {
+    fn: () => api.getPopularMovies(),
+    items: [] as Movie[],
+    label: 'Popular movies',
+  },
+
+  top_rated_movies: {
+    fn: () => api.getTopMovies(),
+    items: [] as Movie[],
+    label: 'Top rated movies',
+  },
+
+  popular_tv: {
     fn: () => api.getPopularShows(),
     items: [] as Show[],
     label: 'Popular shows',
   },
 
-  top_rated: {
+  top_rated_tv: {
     fn: () => api.getTopShows(),
     items: [] as Show[],
     label: 'Top rated shows',
   },
 })
 
-export const populateTvStore = action(
-  tvStore,
-  'populateTvStore',
+export const populateIndexStore = action(
+  indexStore,
+  'populateIndexStore',
   async (store) => {
     const storeValue = store.get()
 
     /**
-     * For each category in tv store,
+     * For each category in store,
      * get the corresponding items and save them in the state.
      */
     await Promise.all(
@@ -43,6 +61,6 @@ export const populateTvStore = action(
      * because we mutate the state directly,
      * we must notify the components for an update.
      */
-    tvStore.notify()
+    indexStore.notify()
   },
 )
