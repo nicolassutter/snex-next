@@ -28,16 +28,16 @@ export const api = {
     return axios.get<{ results: Movie[] }>('/movie/top_rated')
   },
 
-  getUpcomingMovies(): Promise<Movie[]> {
-    return axios.get('/movie/upcoming')
+  getUpcomingMovies() {
+    return axios.get<{ results: Movie[] }>('/movie/upcoming')
   },
 
-  getPopularShows(): Promise<Show[]> {
-    return axios.get('/shows/popular')
+  getPopularShows() {
+    return axios.get<{ results: Show[] }>('/tv/popular')
   },
 
-  getTopShows(): Promise<Show[]> {
-    return axios.get('/shows/top_rated')
+  getTopShows() {
+    return axios.get<{ results: Show[] }>('/tv/top_rated')
   },
 
   async getDiscoverShows(options: Partial<Options> = {}) {
