@@ -26,6 +26,15 @@
       ],
       "react-dom": [
         "./node_modules/preact/compat/"
+      ],
+      "#src/*": [
+        "./src/*"
+      ],
+      "#types": [
+        "./types/index.d.ts"
+      ],
+      "#types/*": [
+        "./types/*"
       ]
     }
   },
