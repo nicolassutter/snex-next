@@ -149,10 +149,11 @@ app.all('*', async (req, res) => {
       params: query,
       headers: {
         Authorization: `Bearer ${process.env.TMDB}`,
-      },
+        'Accept-Encoding': 'gzip,deflate,compress'
+      }
     }
 
-    if (body) {
+    if (Object.keys(body ?? {}).length) {
       axiosConfig.data = body
     }
 
