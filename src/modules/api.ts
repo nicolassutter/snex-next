@@ -1,4 +1,4 @@
-import type { Movie, Show } from '#types'
+import type { MediaType, Movie, Show } from '#types'
 import { default as _axios } from 'axios'
 
 const suffix = '/.netlify/functions/api'
@@ -147,9 +147,7 @@ export const api = {
     return results
   },
 
-  async getMedia(params: any) {
-    const { type, id } = params
-
+  async getMedia({ type, id }: { type: MediaType; id: string }) {
     const append_to_response = [
       'credits',
       'videos',
@@ -161,12 +159,11 @@ export const api = {
       'external_ids',
     ].toString()
 
-    if (['movie', 'tv'].includes(type)) {
-      const { data } = await axios.get(`/${type}/${id}`, {
-        params: { append_to_response },
-      })
-      return data
-    }
+    const { data } = await axios.get(`/${type}/${id}`, {
+      params: { append_to_response },
+    })
+
+    return data
   },
 
   async getSeason(params: any) {

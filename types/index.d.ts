@@ -133,3 +133,5 @@ export interface Person {
   known_for_department: string
   birthday: string
 }
+
+export type MediaType = 'movie' | 'tv'

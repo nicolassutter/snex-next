@@ -46,7 +46,7 @@ function Index() {
   return (
     <div className='index-page p-2'>
       {Object.entries(state).map(
-        ([key, { items, label }]) =>
+        ([key, { items, label, category }]) =>
           items.length > 0 && (
             <div
               className='banner mt-10 first:mt-0'
@@ -79,7 +79,7 @@ function Index() {
                     key={item.id}
                     className='h-[unset] w-28'
                   >
-                    <Link to='/#'>
+                    <Link to={`/media/${category}_${item.id}`}>
                       <PosterCard
                         src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                         className='h-full'
