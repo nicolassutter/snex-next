@@ -159,7 +159,7 @@ export const api = {
       'external_ids',
     ].toString()
 
-    const { data } = await axios.get(`/${type}/${id}`, {
+    const { data } = await axios.get(`/tmdb/${type}/${id}`, {
       params: { append_to_response },
     })
 
