@@ -1,6 +1,6 @@
 import { api } from '#src/modules/api'
 import { makePromise } from '#src/utils/index'
-import type { MediaType } from '#types'
+import type { MediaType, Movie, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 
 function isMediaType(param: unknown): param is MediaType {
@@ -12,6 +12,7 @@ function isMediaType(param: unknown): param is MediaType {
 function Media() {
   const params = useParams()
   const navigate = useNavigate()
+  const media = useSignal<null | Movie | Show>(null)
 
   const slug = params.slug
 
@@ -29,11 +30,37 @@ function Media() {
   useEffectOnce(() => {
     makePromise(async () => {
       const res = await api.getMedia({ type: mediaType, id })
-      console.log(res)
+      media.value = res
     })
   })
 
-  return <div className='media-page'></div>
+  const cover = computed(() => {
+    return media.value?.backdrop_path
+      ? `https://image.tmdb.org/t/p/w1280${media.value?.backdrop_path}`
+      : ''
+  })
+
+  const thumbnail = computed(() => {
+    return media.value?.poster_path
+      ? `https://image.tmdb.org/t/p/w500${media.value?.poster_path}`
+      : ''
+  })
+
+  return (
+    <div className='media-page grid grid-cols-[300px_1fr] gap-5'>
+      <div>
+        <img
+          src={thumbnail}
+          alt=''
+        />
+      </div>
+
+      <img
+        src={cover}
+        alt=''
+      />
+    </div>
+  )
 }
 
 export default Media
