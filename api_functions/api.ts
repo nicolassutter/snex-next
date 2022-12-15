@@ -1,22 +1,25 @@
-import type { Method, AxiosRequestConfig, AxiosError } from 'axios'
+import type { AxiosRequestConfig, AxiosError } from 'axios'
 import axios from 'axios'
-import express, { Router } from 'express'
-import serverless from 'serverless-http'
+import Fastify from 'fastify'
 import { load as loadCheerio } from 'cheerio'
+import httpProxy from '@fastify/http-proxy'
+import awsLambdaFastify from '@fastify/aws-lambda'
+import cors from '@fastify/cors'
 
-const app = express()
+const fastify = Fastify({})
+
+fastify.register(cors, {
+  // put your options here
+})
+
 const TMDB = 'https://api.themoviedb.org/3'
+
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
 }
 
-const router = Router()
-
 const sanitize_str = (str: string) => str.replace(/(\r\n|\n|\r)/gm, '')
-
-app.use(express.json())
-app.use('/.netlify/functions/api', router)
 
 const imdb_root = 'https://www.imdb.com'
 
@@ -98,79 +101,69 @@ const get_reviews = async (imdb_id: string) => {
   }
 }
 
-router.get('/entry/:imdb_id/info', async (req, res) => {
-  try {
-    const {
-      params: { imdb_id },
-    } = req
-
-    const axiosConfig: AxiosRequestConfig = {
-      url: `${imdb_root}/title/${imdb_id}`,
-      method: 'get',
-    }
-
-    const get_info = async () => (await axios(axiosConfig)).data
-
-    const reqs = [get_reviews(imdb_id), get_info()]
-
-    const [reviews, page_html] = await Promise.all(reqs)
-
-    const $ = loadCheerio(page_html)
-    const score = $('[data-testid*="rating__score"] > span').text().trim()
-    const scoreFloat = Number.parseFloat(score)
-
-    return res
-      .status(200)
-      .set(headers)
-      .json({
-        data: {
-          score: !Number.isNaN(scoreFloat) ? scoreFloat : null,
-          reviews,
-        },
-      })
-  } catch (error) {
-    const err = error as AxiosError
-
-    return res
-      .status(err.response?.status || 500)
-      .set(headers)
-      .json(err.response?.data || {})
-  }
-})
-
-app.all('*', async (req, res) => {
-  try {
-    const { method, query, path, body } = req
-    const [, url] = path.split('/.netlify/functions/api')
-
-    const axiosConfig: AxiosRequestConfig = {
-      url: TMDB + url,
-      method: method as Method,
-      params: query,
-      headers: {
-        Authorization: `Bearer ${process.env.TMDB}`,
-        'Accept-Encoding': 'gzip,deflate,compress'
+fastify.register(
+  (app, _opts, next) => {
+    app.get<{
+      Params: {
+        imdb_id: string
       }
-    }
+    }>('/entry/:imdb_id/info', async (request, reply) => {
+      try {
+        const {
+          params: { imdb_id },
+        } = request
 
-    if (Object.keys(body ?? {}).length) {
-      axiosConfig.data = body
-    }
+        const axiosConfig: AxiosRequestConfig = {
+          url: `${imdb_root}/title/${imdb_id}`,
+          method: 'get',
+        }
 
-    const { data, status } = await axios(axiosConfig)
+        const get_info = async () => (await axios(axiosConfig)).data
+        const reqs = [get_reviews(imdb_id), get_info()]
 
-    return res.status(status).set(headers).json(data)
-  } catch (error) {
-    const err = error as AxiosError
+        const [reviews, page_html] = await Promise.all(reqs)
 
-    return res
-      .status(err.response?.status || 500)
-      .set(headers)
-      .json(err.response?.data || {})
-  }
+        const $ = loadCheerio(page_html)
+        const score = $('[data-testid*="rating__score"] > span').text().trim()
+        const scoreFloat = Number.parseFloat(score)
+
+        return reply
+          .status(200)
+          .headers(headers)
+          .send({
+            data: {
+              score: !Number.isNaN(scoreFloat) ? scoreFloat : null,
+              reviews,
+            },
+          })
+      } catch (error) {
+        const err = error as AxiosError
+
+        return reply
+          .status(err.response?.status || 500)
+          .headers(headers)
+          .send(err.response?.data || {})
+      }
+    })
+
+    next()
+  },
+  { prefix: '/.netlify/functions/api' },
+)
+
+fastify.register(httpProxy, {
+  upstream: TMDB,
+  prefix: '/.netlify/functions/api/tmdb',
+  http: {}, // Need to be defined explicitly
+  replyOptions: {
+    rewriteRequestHeaders: (_originalReq, headers) => ({
+      ...headers,
+      Authorization: `Bearer ${process.env.TMDB}`,
+    }),
+  },
 })
 
 /**
  * Handles conversion to netlify function
  */
-export const handler = serverless(app)
+export const handler = awsLambdaFastify(fastify)

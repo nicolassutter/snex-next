@@ -21,23 +21,23 @@ interface Options {
 
 export const api = {
   getPopularMovies() {
-    return axios.get<{ results: Movie[] }>('/movie/popular')
+    return axios.get<{ results: Movie[] }>('/tmdb/movie/popular')
   },
 
   getTopMovies() {
-    return axios.get<{ results: Movie[] }>('/movie/top_rated')
+    return axios.get<{ results: Movie[] }>('/tmdb/movie/top_rated')
   },
 
   getUpcomingMovies() {
-    return axios.get<{ results: Movie[] }>('/movie/upcoming')
+    return axios.get<{ results: Movie[] }>('/tmdb/movie/upcoming')
   },
 
   getPopularShows() {
-    return axios.get<{ results: Show[] }>('/tv/popular')
+    return axios.get<{ results: Show[] }>('/tmdb/tv/popular')
   },
 
   getTopShows() {
-    return axios.get<{ results: Show[] }>('/tv/top_rated')
+    return axios.get<{ results: Show[] }>('/tmdb/tv/top_rated')
   },
 
   async getDiscoverShows(options: Partial<Options> = {}) {
