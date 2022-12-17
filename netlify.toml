@@ -1,6 +1,17 @@
-# The following redirect is intended for use with most SPAs that handle
-# routing internally.
 [functions]
   directory = "api_functions"
+
 [dev]
   functionsPort = 8888
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[build]
+  publish = "dist"
+  command = "pnpm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
