@@ -1,3 +1,5 @@
+import type { LiteralUnion } from 'type-fest'
+
 export interface Video {
   iso_639_1: string
   iso_3166_1: string
@@ -9,21 +11,6 @@ export interface Video {
   official: boolean
   published_at: string
   id: string
-}
-
-export enum Department {
-  Acting = 'Acting',
-  Art = 'Art',
-  Camera = 'Camera',
-  CostumeMakeUp = 'Costume & Make-Up',
-  Crew = 'Crew',
-  Directing = 'Directing',
-  Editing = 'Editing',
-  Lighting = 'Lighting',
-  Production = 'Production',
-  Sound = 'Sound',
-  VisualEffects = 'Visual Effects',
-  Writing = 'Writing',
 }
 
 export interface Cast {
@@ -69,6 +56,7 @@ interface Common {
   vote_average: number
   release_date: string
   original_language: string
+  genres: MediaGenre[]
   runtime: number
   videos: {
     results: Video[]
@@ -80,6 +68,12 @@ interface Common {
       }
     }
   }
+  recommendations: { results: (Movie | Show)[] }
+  similar: { results: (Movie | Show)[] }
+}
+export interface MediaGenre {
+  id: number
+  name: string
 }
 
 export interface Episode {
@@ -135,3 +129,19 @@ export interface Person {
 }
 
 export type MediaType = 'movie' | 'tv'
+
+export type Department = LiteralUnion<
+  | 'Directing'
+  | 'Production'
+  | 'Camera'
+  | 'Acting'
+  | 'Sound'
+  | 'Art'
+  | 'Crew'
+  | 'Editing'
+  | 'Lighting'
+  | 'Visual Effects'
+  | 'Writing'
+  | 'Costume & Make-Up',
+  string
+>

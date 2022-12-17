@@ -1,7 +1,6 @@
 import { PosterCard } from '#src/components/PosterCard'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
-import 'swiper/css'
 import { useStore } from '@nanostores/preact'
 import {
   hasFetchedAtom,
@@ -82,7 +81,7 @@ function Index() {
                     <Link to={`/media/${category}_${item.id}`}>
                       <PosterCard
                         src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                        className='h-full'
+                        className='slider-poster-card'
                         imgAttrs={{
                           className: 'h-full',
                         }}

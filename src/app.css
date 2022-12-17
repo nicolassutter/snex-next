@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+.layout-grid {
+  /* --grid-gutter: theme('spacing.20'); */
+
+  display: grid;
+  grid-template-columns:
+    minmax(theme('spacing.5'), 1fr)
+    minmax(0, theme('screens.3xl'))
+    minmax(theme('spacing.5'), 1fr)
+  ;
+
+  & > *:not([class*="col-span"]) {
+    grid-column: 2 / 3;
+  }
+}
+
+.col-center {
+  grid-column: 2 / 3;
+}
+
+.ui-collapse-open {
+  padding-bottom: theme('spacing.36');
+}
+
+.ui-collapse {
+  &::before {
+    content: '';
+    height: theme('spacing.36');
+    background: linear-gradient(rgba(255, 255, 255, 0.001), theme('colors.base-100'));
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
 .ui-dropdown {
   position: relative;
 }
@@ -25,5 +59,14 @@
 
   &.active {
     background-color: theme('colors.base-100');
+  }
+}
+
+.slider-poster-card {
+  height: 100%;
+  @apply transition-all border-[3px] border-transparent rounded-md overflow-hidden;
+
+  &:hover {
+    @apply scale-[0.99] border-accent;
   }
 }
