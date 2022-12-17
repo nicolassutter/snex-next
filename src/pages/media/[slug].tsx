@@ -3,11 +3,12 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
 import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
 import type { Cast, MediaType, Movie, Show } from '#types'
+import type { Location } from 'react-router'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Link } from 'react-router-dom'
-import { sortBy } from 'lodash-es'
+import { sortBy, uniqBy } from 'lodash-es'
 
 function isMediaType(param: unknown): param is MediaType {
   const mediaTypes = ['movie', 'tv'] satisfies MediaType[]
@@ -15,7 +16,7 @@ function isMediaType(param: unknown): param is MediaType {
   return mediaTypes.includes(param)
 }
 
-function Media() {
+function Media({ location }: { location: Location }) {
   const params = useParams()
   const navigate = useNavigate()
   const media = useSignal<null | Movie | Show>(null)
@@ -24,16 +25,16 @@ function Media() {
   const slug = params.slug
 
   if (!slug) {
-    console.log('redirected - slug')
-    return navigate('/')
+    navigate('/')
+    throw 'No Slug given'
   }
 
   const mediaType = slug?.split('_')?.at(0)
   const id = slug?.split('_')?.at(1)
 
   if (!isMediaType(mediaType) || !id) {
-    console.log('redirected - media type')
-    return navigate('/')
+    navigate('/')
+    throw 'Bad media type'
   }
 
   async function fetchData() {
@@ -52,14 +53,12 @@ function Media() {
     }
   }
 
+  /**
+   * Fetches the initial data + everytime the route changes
+   */
   useEffect(() => {
-    console.log('object')
     fetchData()
-  }, [id])
-
-  // useEffectOnce(() => {
-  //   fetchData()
-  // })
+  }, [location.pathname])
 
   /**
    * Data for the box containing "Directors", "Produces" and "Writers"
@@ -68,24 +67,30 @@ function Media() {
     return [
       {
         name: 'Directors',
-        items:
+        items: uniqBy(
           media.value?.credits.crew.filter(
             (crewMember) => crewMember.department === 'Directing',
           ) ?? [],
+          'id',
+        ),
       },
       {
         name: 'Producers',
-        items:
+        items: uniqBy(
           media.value?.credits.crew.filter(
             (crewMember) => crewMember.department === 'Production',
           ) ?? [],
+          'id',
+        ),
       },
       {
         name: 'Writers',
-        items:
+        items: uniqBy(
           media.value?.credits.crew.filter(
             (crewMember) => crewMember.department === 'Writing',
           ) ?? [],
+          'id',
+        ),
       },
     ] as const
   })
@@ -237,7 +242,7 @@ function Media() {
                 {metaInfo.items?.slice(0, 4).map((crewMember) => (
                   <li
                     className='mr-5 first:list-none'
-                    key={`crew-member-${crewMember.id}`}
+                    key={`crew-member-${crewMember.id}-${metaInfo.name}`}
                   >
                     <Link
                       to='#'
