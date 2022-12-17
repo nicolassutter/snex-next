@@ -19,9 +19,12 @@ export function NavBar({ className }: Props) {
 
   const scrollY = useSignal(0)
 
-  const onScroll = throttle(() => {
-    scrollY.value = window.scrollY
-  }, 50)
+  const onScroll = useCallback(
+    throttle(() => {
+      scrollY.value = window.scrollY
+    }, 50),
+    [],
+  )
 
   useEffectOnce(() => {
     window.addEventListener('scroll', onScroll)

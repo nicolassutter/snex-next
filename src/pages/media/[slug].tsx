@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
 import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
 import type { Cast, MediaType, Movie, Show } from '#types'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Link } from 'react-router-dom'
@@ -17,24 +17,13 @@ function isMediaType(param: unknown): param is MediaType {
 
 function Media() {
   const params = useParams()
-  const navigate = useNavigate()
   const media = useSignal<null | Movie | Show>(null)
   const isLoading = useSignal(true)
 
   const slug = params.slug
 
-  if (!slug) {
-    navigate('/')
-    throw 'No Slug given'
-  }
-
   const mediaType = slug?.split('_')?.at(0)
   const id = slug?.split('_')?.at(1)
-
-  if (!isMediaType(mediaType) || !id) {
-    navigate('/')
-    throw 'Bad media type'
-  }
 
   async function fetchData() {
     if (!isMediaType(mediaType) || !id) {
@@ -62,7 +51,7 @@ function Media() {
   /**
    * Data for the box containing "Directors", "Produces" and "Writers"
    */
-  const crewMetaInfo = computed(() => {
+  const crewMetaInfo = useComputed(() => {
     return [
       {
         name: 'Directors',
@@ -97,7 +86,7 @@ function Media() {
   /**
    * Data for the sliders ("Recommended", "Similiar")
    */
-  const sliders = computed(() => {
+  const sliders = useComputed(() => {
     return [
       {
         name: 'Recommended',
@@ -110,24 +99,24 @@ function Media() {
     ] as const
   })
 
-  const cover = computed(() => {
+  const cover = useComputed(() => {
     return media.value?.backdrop_path
       ? `https://image.tmdb.org/t/p/w1280${media.value.backdrop_path}`
       : ''
   })
 
-  const thumbnail = computed(() =>
+  const thumbnail = useComputed(() =>
     media.value ? getPosterPicture(media.value) ?? '' : '',
   )
 
-  const releaseYear = computed(() =>
+  const releaseYear = useComputed(() =>
     media.value ? new Date(media.value?.release_date).getFullYear() : undefined,
   )
 
   /**
    * The media runtime in human readable format
    */
-  const runtime = computed(() => {
+  const runtime = useComputed(() => {
     if (!media.value) {
       return undefined
     }
@@ -142,7 +131,7 @@ function Media() {
   /**
    * Computes the profiles shown in the "People section"
    */
-  const people = computed(() => {
+  const people = useComputed(() => {
     // Crew members sorted by highest popularity fist
     const crew = sortBy(
       media.value?.credits.crew.slice(0, 10) ?? [],
@@ -198,6 +187,7 @@ function Media() {
       ></PosterCard>
 
       <div className='content-col w-full overflow-hidden relative p-5'>
+        {JSON.stringify(params)}
         {/* cover image */}
         <img
           className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm'
