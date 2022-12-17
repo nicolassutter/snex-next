@@ -73,22 +73,24 @@ function Index() {
                   1024: { slidesPerView: 6 },
                 }}
               >
-                {items.map((item) => (
-                  <SwiperSlide
-                    key={item.id}
-                    className='h-[unset] w-28'
-                  >
-                    <Link to={`/media/${category}_${item.id}`}>
-                      <PosterCard
-                        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                        className='slider-poster-card'
-                        imgAttrs={{
-                          className: 'h-full',
-                        }}
-                      ></PosterCard>
-                    </Link>
-                  </SwiperSlide>
-                ))}
+                {items.map((item) =>
+                  item.poster_path ? (
+                    <SwiperSlide
+                      key={item.id}
+                      className='h-[unset!important] w-28'
+                    >
+                      <Link to={`/media/${category}_${item.id}`}>
+                        <PosterCard
+                          src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                          className='slider-poster-card'
+                          imgAttrs={{
+                            className: 'h-full',
+                          }}
+                        ></PosterCard>
+                      </Link>
+                    </SwiperSlide>
+                  ) : undefined,
+                )}
               </Swiper>
             </div>
           ),
