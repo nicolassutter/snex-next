@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
 import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
 import type { Cast, MediaType, Movie, Show } from '#types'
-import type { Location } from 'react-router'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
@@ -16,7 +15,7 @@ function isMediaType(param: unknown): param is MediaType {
   return mediaTypes.includes(param)
 }
 
-function Media({ location }: { location: Location }) {
+function Media() {
   const params = useParams()
   const navigate = useNavigate()
   const media = useSignal<null | Movie | Show>(null)
@@ -56,9 +55,9 @@ function Media({ location }: { location: Location }) {
   /**
    * Fetches the initial data + everytime the route changes
    */
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchData()
-  }, [location.pathname])
+  })
 
   /**
    * Data for the box containing "Directors", "Produces" and "Writers"

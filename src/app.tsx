@@ -30,7 +30,7 @@ export function App() {
               children: [
                 {
                   path: ':slug',
-                  element: <Media location={location}></Media>,
+                  element: <Media key={location.pathname}></Media>,
                 },
               ],
             },
