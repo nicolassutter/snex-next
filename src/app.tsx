@@ -26,7 +26,11 @@ export function App() {
               path: '/media',
               children: [
                 {
-                  path: ':slug',
+                  path: tvRoutePatten,
+                  element: <Media></Media>,
+                },
+                {
+                  path: movieRoutePatten,
                   element: <Media></Media>,
                 },
               ],

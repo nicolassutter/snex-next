@@ -79,7 +79,7 @@ function Index() {
                       key={item.id}
                       className='h-[unset!important] w-28'
                     >
-                      <Link to={`/media/${category}_${item.id}`}>
+                      <Link to={`/media/${category}/${item.id}`}>
                         <PosterCard
                           src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                           className='slider-poster-card'
