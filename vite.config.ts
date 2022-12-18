@@ -29,17 +29,9 @@ export default defineConfig({
       imports: [
         'preact',
         {
-          '@preact/signals': [
-            'signal',
-            'computed',
-            'batch',
-            'effect',
-            'useSignal',
-            'useComputed',
-          ],
           'react-use': ['useEffectOnce'],
           preact: ['FunctionComponent'],
-          classnames: [['default', 'classnames']],
+          clsx: ['clsx'],
         },
       ],
       dirs: ['./src/hooks'],
