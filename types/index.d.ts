@@ -127,6 +127,7 @@ export interface Person {
   biography: string
   known_for_department: string
   birthday: string
+  deathday: string
 }
 
 export type MediaType = 'movie' | 'tv'
