@@ -177,7 +177,7 @@ function Media() {
       <div className='content-col w-full overflow-hidden relative p-5'>
         {/* cover image */}
         <img
-          className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm'
+          className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm w-full'
           src={cover}
           alt=''
           aria-hidden={true}
@@ -235,10 +235,10 @@ function Media() {
           ))}
         </div>
 
-        <p
+        <div
           className='mt-5 max-w-3xl'
           dangerouslySetInnerHTML={{
-            __html: md.renderInline(media?.overview ?? ''),
+            __html: md.render(media?.overview ?? ''),
           }}
         />
 
@@ -259,7 +259,7 @@ function Media() {
                     key={`crew-member-${crewMember.id}-${metaInfo.name}`}
                   >
                     <Link
-                      to='#'
+                      to={`/person/${crewMember.id}`}
                       className='link link-info'
                     >
                       {crewMember.name}
@@ -283,13 +283,15 @@ function Media() {
                 className={`${person.id}`}
                 key={`person-${person.id}-${person.department}`}
               >
-                <img
-                  src={getProfilePicture(person)}
-                  className='rounded-md'
-                  alt=''
-                />
-                <p>{person.name}</p>
-                <p>{person.job ?? person.character}</p>
+                <Link to={`/person/${person.id}`}>
+                  <img
+                    src={getProfilePicture(person)}
+                    className='rounded-md'
+                    alt=''
+                  />
+                  <p>{person.name}</p>
+                  <p>{person.job ?? person.character}</p>
+                </Link>
               </li>
             ))}
           </ul>
