@@ -112,9 +112,10 @@ export interface Show extends Common {
   name: string
   poster_path: string
   backdrop_path: string
-  season_number: number
+  number_of_seasons: number
+  number_of_episodes: number
   first_air_date: string
-  episode_run_time: string[]
+  episode_run_time: number[]
   seasons: Season[]
 }
 
