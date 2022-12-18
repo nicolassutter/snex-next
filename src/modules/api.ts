@@ -189,9 +189,9 @@ export const api = {
     return genres
   },
 
-  async getPerson(id: string) {
+  async getPerson(id: string | number) {
     const { data } = await axios.get(
-      `/person/${id}?append_to_response=movie_credits,tv_credits`,
+      `/tmdb/person/${id}?append_to_response=movie_credits,tv_credits`,
     )
 
     return data
