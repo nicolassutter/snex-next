@@ -5,7 +5,7 @@ import 'swiper/css'
 import { Suspense } from 'preact/compat'
 
 import Index from './pages'
-import Media from './pages/media/[slug]'
+import Media from './pages/media/[id]'
 
 export function App() {
   return (
