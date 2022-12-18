@@ -2,21 +2,16 @@ import { api } from '#src/modules/api'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
 import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
-import type { Cast, MediaType, Movie, Show } from '#types'
-import { useParams } from 'react-router'
+import type { Cast, Movie, Show } from '#types'
+import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Link } from 'react-router-dom'
 import { sortBy, uniqBy } from 'lodash-es'
 
-function isMediaType(param: unknown): param is MediaType {
-  const mediaTypes = ['movie', 'tv'] satisfies MediaType[]
-  // @ts-expect-error TS isn't happy, it's ok
-  return mediaTypes.includes(param)
-}
-
 function Media() {
   const params = useParams()
+  const navigate = useNavigate()
   const [media, setMedia] = useState<null | Movie | Show>()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -149,19 +144,17 @@ function Media() {
     return _people
   }, [media])
 
-  const slug = params.slug
-
-  const mediaType = slug?.split('_')?.at(0)
-  const id = slug?.split('_')?.at(1)
+  const mediaType = useMediaType()
 
   async function fetchData() {
-    if (!isMediaType(mediaType) || !id) {
+    if (!params.id) {
+      navigate('/')
       return
     }
 
     try {
       setIsLoading(true)
-      const res = await api.getMedia({ type: mediaType, id })
+      const res = await api.getMedia({ type: mediaType, id: params.id })
       setMedia(res)
     } catch (error) {
       /* error */
@@ -175,7 +168,7 @@ function Media() {
    */
   useEffect(() => {
     fetchData()
-  }, [params])
+  }, [params.id])
 
   return !isLoading ? (
     <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
@@ -295,7 +288,7 @@ function Media() {
               >
                 {slider.items?.map((sliderItem) => (
                   <SwiperSlide key={`recommendation-${sliderItem.id}`}>
-                    <Link to={`/media/${mediaType}_${sliderItem.id}`}>
+                    <Link to={`/media/${mediaType}/${sliderItem.id}`}>
                       <PosterCard
                         src={getPosterPicture(sliderItem) as string}
                         className='slider-poster-card'
