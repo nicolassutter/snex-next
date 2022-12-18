@@ -15,10 +15,10 @@ export const PosterCard: FunctionComponent<Props> = ({
   className,
 }) => {
   return (
-    <div className={classnames('poster-card', className)}>
+    <div className={clsx('poster-card', className)}>
       <img
         {...imgAttrs}
-        className={classnames(
+        className={clsx(
           classesInAttrs(imgAttrs),
           'aspect-[2/3] object-cover select-none rounded-md',
         )}

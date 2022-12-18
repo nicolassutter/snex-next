@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function NavBar({ className }: Props) {
-  const items = useSignal([
+  const [items] = useState([
     {
       _key: uuid(),
       title: 'Settings',
@@ -17,11 +17,11 @@ export function NavBar({ className }: Props) {
     },
   ])
 
-  const scrollY = useSignal(0)
+  const [scrollY, setScrollY] = useState(0)
 
   const onScroll = useCallback(
     throttle(() => {
-      scrollY.value = window.scrollY
+      setScrollY(window.scrollY)
     }, 50),
     [],
   )
@@ -36,9 +36,9 @@ export function NavBar({ className }: Props) {
 
   return (
     <nav
-      className={classnames(
+      className={clsx(
         'bg-base-100 layout-grid',
-        { shadow: scrollY.value > 0 },
+        { shadow: scrollY > 0 },
         className,
       )}
     >
@@ -70,13 +70,13 @@ export function NavBar({ className }: Props) {
                   </Menu.Button>
 
                   <Menu.Items className='ui-dropdown-panel right-0'>
-                    {items.value.map((item) => (
+                    {items.map((item) => (
                       <Menu.Item key={item._key}>
                         {
                           // @ts-expect-error Seems like the lib isn't correctly typed
                           ({ active }) => (
                             <Link
-                              className={classnames('ui-dropdown-item', {
+                              className={clsx('ui-dropdown-item', {
                                 active,
                               })}
                               to={item.to}

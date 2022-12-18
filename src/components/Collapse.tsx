@@ -11,22 +11,22 @@ export const Collapse: FunctionComponent<PropsWithChildren<Props>> = ({
   children,
   maxHeight,
 }) => {
-  const isOpened = useSignal(false)
+  const [isOpened, setIsOpened] = useState(false)
 
   return (
     <div
-      className={classnames(
+      className={clsx(
         'ui-collapse relative',
         {
-          'ui-collapse-open': isOpened.value,
-          'ui-collapse-close': !isOpened.value,
+          'ui-collapse-open': isOpened,
+          'ui-collapse-close': !isOpened,
         },
         className,
       )}
     >
       <div
         className='ui-collapse-content overflow-hidden'
-        style={{ maxHeight: isOpened.value ? 'unset' : maxHeight }}
+        style={{ maxHeight: isOpened ? 'unset' : maxHeight }}
       >
         {children}
       </div>
@@ -34,9 +34,9 @@ export const Collapse: FunctionComponent<PropsWithChildren<Props>> = ({
       <div className='absolute bottom-5 flex justify-center left-0 right-0'>
         <button
           className='btn'
-          onClick={() => (isOpened.value = !isOpened.value)}
+          onClick={() => setIsOpened((val) => !val)}
         >
-          {isOpened.value ? 'Close' : 'Expand'}
+          {isOpened ? 'Close' : 'Expand'}
         </button>
       </div>
     </div>

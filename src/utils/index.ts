@@ -8,7 +8,7 @@ export async function makePromise<T extends (...args: any[]) => Promise<any>>(
 }
 
 export function classesInAttrs(attrs?: JSX.HTMLAttributes<any>) {
-  return classnames(attrs?.class, attrs?.className)
+  return clsx(attrs?.class, attrs?.className)
 }
 
 export function getProfilePicture<T extends { profile_path?: string | null }>(
