@@ -6,6 +6,7 @@ import { Suspense } from 'preact/compat'
 
 import Index from './pages'
 import Media from './pages/media/[id]'
+import Person from './pages/person/[id]'
 
 export function App() {
   return (
@@ -34,6 +35,10 @@ export function App() {
                   element: <Media></Media>,
                 },
               ],
+            },
+            {
+              path: '/person/:id',
+              element: <Person></Person>,
             },
           ])}
         </Suspense>
