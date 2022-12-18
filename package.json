@@ -22,6 +22,7 @@
     "axios": "^1.2.1",
     "cheerio": "1.0.0-rc.12",
     "clsx": "^1.2.1",
+    "date-fns": "^2.29.3",
     "fastify": "^4.10.2",
     "lodash-es": "^4.17.21",
     "markdown-it": "^13.0.1",
