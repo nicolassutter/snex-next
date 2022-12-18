@@ -1,7 +1,13 @@
 import { api } from '#src/modules/api'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
-import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
+import {
+  getPosterPicture,
+  getProfilePicture,
+  isMovie,
+  isShow,
+  md,
+} from '#src/utils/index'
 import type { Cast, Movie, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
@@ -74,24 +80,15 @@ function Media() {
 
   const thumbnail = media ? getPosterPicture(media) ?? '' : ''
 
-  const releaseYear = media
-    ? new Date(media?.release_date).getFullYear()
-    : undefined
-
   /**
-   * The media runtime in human readable format
+   * Parses a number of minutes into a human readable format
    */
-  const runtime = useMemo(() => {
-    if (!media) {
-      return undefined
-    }
-
-    const minutes = media?.runtime
+  function minutesToHuman(minutes: number) {
     const hours = Math.floor(minutes / 60)
     const leftoverMinutes = minutes % 60
 
-    return `${hours}h${leftoverMinutes}m`
-  }, [media])
+    return hours > 0 ? `${hours}h${leftoverMinutes}m` : `${leftoverMinutes}m`
+  }
 
   /**
    * Computes the profiles shown in the "People section"
@@ -170,7 +167,7 @@ function Media() {
     fetchData()
   }, [params.id])
 
-  return !isLoading ? (
+  return !isLoading && media ? (
     <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
       <PosterCard
         src={thumbnail}
@@ -186,10 +183,45 @@ function Media() {
           aria-hidden={true}
         />
 
-        <h1 className='font-bold text-4xl'>{media?.title}</h1>
+        <h1 className='font-bold text-4xl'>{media?.title ?? media?.name}</h1>
 
-        <div>
-          {releaseYear} - {runtime}
+        <div className='base-media-info'>
+          <ul className='list-disc flex space-x-5'>
+            {/* year */}
+            <li className='list-none'>
+              {isMovie(media) && new Date(media.release_date).getFullYear()}
+              {isShow(media) && new Date(media.first_air_date).getFullYear()}
+            </li>
+
+            {/* runtime */}
+            <li>
+              {isMovie(media) && minutesToHuman(media.runtime)}
+              {isShow(media) && (
+                <>
+                  {media.episode_run_time.length > 1 ? (
+                    // If there are multiple runtimes of episodes
+                    <>
+                      {minutesToHuman(Math.min(...media.episode_run_time))}-
+                      {minutesToHuman(Math.max(...media.episode_run_time))}
+                    </>
+                  ) : (
+                    // If every episode is the same runtime
+                    <>{minutesToHuman(media.episode_run_time[0])}</>
+                  )}
+                </>
+              )}
+            </li>
+
+            {/* seasons count */}
+            {isShow(media) && media.number_of_seasons && (
+              <li>{media.number_of_seasons} seasons</li>
+            )}
+
+            {/* episodes count */}
+            {isShow(media) && media.number_of_episodes && (
+              <li>{media.number_of_episodes} episodes</li>
+            )}
+          </ul>
         </div>
 
         <div className='genres mt-3 flex space-x-1 max-w-full overflow-x-auto'>
@@ -217,7 +249,10 @@ function Media() {
               className='border-y-[1px] border-base-content flex py-2 first:border-b-0 last:border-t-0'
             >
               <span className='font-bold'>{metaInfo.name}:</span>
+
               <ul className='inline-flex ml-2 list-disc'>
+                {metaInfo.items.length === 0 && <>-</>}
+
                 {metaInfo.items?.slice(0, 4).map((crewMember) => (
                   <li
                     className='mr-5 first:list-none'
