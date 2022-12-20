@@ -36,6 +36,12 @@
   }
 }
 
+.ui-collapse-hidden {
+  &::before {
+    display: none;
+  }
+}
+
 .ui-dropdown {
   position: relative;
 }
