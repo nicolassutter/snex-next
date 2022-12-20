@@ -58,6 +58,40 @@ function Media() {
     [media],
   )
 
+  const trailers = useMemo(() => {
+    return media?.videos.results.filter((video) => {
+      return (
+        video.type === 'Trailer' &&
+        video.site === 'YouTube' &&
+        video.official === true
+      )
+    })
+  }, [media])
+
+  const videos = useMemo(() => {
+    return media?.videos.results.filter((video) => {
+      return (
+        video.type !== 'Trailer' &&
+        video.official === true &&
+        video.type !== 'Featurette'
+      )
+    })
+  }, [media])
+
+  const videosData = useMemo(
+    () => [
+      {
+        name: 'Trailers',
+        items: trailers,
+      },
+      {
+        name: 'Videos',
+        items: videos,
+      },
+    ],
+    [trailers, videos],
+  )
+
   /**
    * Data for the sliders ("Recommended", "Similiar")
    */
@@ -274,7 +308,7 @@ function Media() {
         <h2 className='text-3xl font-bold mt-16'>People</h2>
 
         <Collapse
-          maxHeight='500px'
+          maxHeight={500}
           className='mt-5'
         >
           <ul className='people-list grid grid-cols-6 gap-5'>
@@ -296,6 +330,34 @@ function Media() {
             ))}
           </ul>
         </Collapse>
+
+        {videosData.map(({ name, items }) =>
+          items?.length ? (
+            <>
+              <h2 className='text-3xl font-bold mt-16'>{name}</h2>
+
+              <Collapse
+                maxHeight={500}
+                className='mt-5'
+              >
+                <ul className='trailers-list grid grid-cols-3 gap-5'>
+                  {items.map((video) => (
+                    <li key={`video-${video.id}`}>
+                      <iframe
+                        className='w-full aspect-video rounded-lg'
+                        src={`https://www.youtube.com/embed/${video.key}`}
+                        frameBorder='0'
+                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                        allowFullScreen
+                        loading='lazy'
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </Collapse>
+            </>
+          ) : undefined,
+        )}
 
         {sliders.map((slider) =>
           // Display slider only if it has items
