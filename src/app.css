@@ -76,3 +76,8 @@
     @apply scale-[0.99] border-accent;
   }
 }
+
+.section-title {
+  font-size: theme('fontSize.3xl');
+  font-weight: theme('fontWeight.bold')
+}

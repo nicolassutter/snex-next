@@ -305,7 +305,7 @@ function Media() {
           ))}
         </ul>
 
-        <h2 className='text-3xl font-bold mt-16'>People</h2>
+        <h2 className='section-title mt-16'>People</h2>
 
         <Collapse
           maxHeight={500}
@@ -334,7 +334,7 @@ function Media() {
         {videosData.map(({ name, items }) =>
           items?.length ? (
             <>
-              <h2 className='text-3xl font-bold mt-16'>{name}</h2>
+              <h2 className='section-title mt-16'>{name}</h2>
 
               <Collapse
                 maxHeight={500}
@@ -363,7 +363,7 @@ function Media() {
           // Display slider only if it has items
           slider.items?.length ? (
             <div key={`slider-${slider.name}`}>
-              <h2 className='text-3xl font-bold mt-16'>{slider.name}</h2>
+              <h2 className='section-title mt-16'>{slider.name}</h2>
 
               <Swiper
                 modules={[A11y, Mousewheel]}
