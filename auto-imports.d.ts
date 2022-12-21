@@ -6,6 +6,7 @@ declare global {
   const clsx: typeof import('clsx')['clsx']
   const movieRoutePatten: typeof import('./src/hooks/useMediaRoute')['movieRoutePatten']
   const tvRoutePatten: typeof import('./src/hooks/useMediaRoute')['tvRoutePatten']
+  const useArrPaths: typeof import('./src/hooks/useArrPaths')['useArrPaths']
   const useCallback: typeof import('preact/hooks')['useCallback']
   const useContext: typeof import('preact/hooks')['useContext']
   const useEffect: typeof import('preact/hooks')['useEffect']

@@ -20,6 +20,7 @@ function Media() {
   const navigate = useNavigate()
   const [media, setMedia] = useState<null | Movie | Show>()
   const [isLoading, setIsLoading] = useState(true)
+  const arrPaths = useArrPaths(media)
 
   /**
    * Data for the box containing "Directors", "Produces" and "Writers"
@@ -204,7 +205,9 @@ function Media() {
   return (
     <>
       <Helmet>
-        <title>{isLoading ? `SNEX` : `${media?.title} | SNEX`}</title>
+        <title>
+          {isLoading ? `SNEX` : `${media?.title ?? media?.name} | SNEX`}
+        </title>
       </Helmet>
 
       {!isLoading && media ? (
@@ -313,6 +316,29 @@ function Media() {
                 </li>
               ))}
             </ul>
+
+            <div className='flex mt-5'>
+              {arrPaths.map(({ name, logo, path }) => (
+                <>
+                  {((name === 'radarr' && isMovie(media)) ||
+                    (name === 'sonarr' && isShow(media))) && (
+                    <a
+                      className='btn'
+                      target='_blank'
+                      href={path}
+                      rel='noreferrer'
+                    >
+                      <img
+                        src={logo}
+                        alt=''
+                        className='w-5 mr-1'
+                      />
+                      {name === 'radarr' ? 'Add to Radarr' : 'Add to Sonarr'}
+                    </a>
+                  )}
+                </>
+              ))}
+            </div>
 
             <h2 className='section-title mt-16'>People</h2>
 
