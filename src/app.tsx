@@ -8,6 +8,7 @@ import Index from './pages'
 import Media from './pages/media/[id]'
 import Person from './pages/person/[id]'
 import Search from './pages/search'
+import Settings from './pages/settings'
 
 export function App() {
   return (
@@ -45,6 +46,10 @@ export function App() {
               // `q` query param for search
               path: '/search',
               element: <Search></Search>,
+            },
+            {
+              path: '/settings',
+              element: <Settings></Settings>,
             },
           ])}
         </Suspense>
