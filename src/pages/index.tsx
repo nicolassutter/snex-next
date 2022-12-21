@@ -17,6 +17,7 @@ function Index() {
   )
 
   const state = useStore(indexStore)
+  const [isLoading, setIsLoading] = useState(true)
 
   const hasFetchedData = useStore(hasFetchedAtom)
 
@@ -38,6 +39,7 @@ function Index() {
       populateIndexStore().finally(() => {
         hasFetchedAtom.set(true)
         setLastIndexFetchTime(new Date().getTime())
+        setIsLoading(false)
       })
     }
   })
@@ -49,56 +51,64 @@ function Index() {
       </Helmet>
 
       <div className='index-page p-2'>
-        {Object.entries(state).map(
-          ([key, { items, label, category }]) =>
-            items.length > 0 && (
-              <div
-                className='banner mt-10 first:mt-0'
-                key={key}
-              >
-                <h2 className='text-3xl font-bold'>{label}</h2>
+        {!isLoading ? (
+          <>
+            {Object.entries(state).map(
+              ([key, { items, label, category }]) =>
+                items.length > 0 && (
+                  <div
+                    className='banner mt-10 first:mt-0'
+                    key={key}
+                  >
+                    <h2 className='text-3xl font-bold'>{label}</h2>
 
-                <Swiper
-                  modules={[A11y, Mousewheel]}
-                  spaceBetween={15}
-                  className='mt-5'
-                  mousewheel={{
-                    enabled: true,
-                    forceToAxis: true,
-                  }}
-                  breakpoints={{
-                    0: { slidesPerView: 1 },
-                    // when window width is >= 320px
-                    320: { slidesPerView: 2 },
-                    // when window width is >= 640px
-                    640: { slidesPerView: 4 },
-                    // when window width is >= 768px
-                    768: { slidesPerView: 5 },
-                    // when window width is >= 1024px
-                    1024: { slidesPerView: 6 },
-                  }}
-                >
-                  {items.map((item) =>
-                    item.poster_path ? (
-                      <SwiperSlide
-                        key={item.id}
-                        className='swiper-poster-slide'
-                      >
-                        <Link to={`/media/${category}/${item.id}`}>
-                          <PosterCard
-                            src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                            className='slider-poster-card poster-effect'
-                            imgAttrs={{
-                              className: 'h-full',
-                            }}
-                          ></PosterCard>
-                        </Link>
-                      </SwiperSlide>
-                    ) : undefined,
-                  )}
-                </Swiper>
-              </div>
-            ),
+                    <Swiper
+                      modules={[A11y, Mousewheel]}
+                      spaceBetween={15}
+                      className='mt-5'
+                      mousewheel={{
+                        enabled: true,
+                        forceToAxis: true,
+                      }}
+                      breakpoints={{
+                        0: { slidesPerView: 1 },
+                        // when window width is >= 320px
+                        320: { slidesPerView: 2 },
+                        // when window width is >= 640px
+                        640: { slidesPerView: 4 },
+                        // when window width is >= 768px
+                        768: { slidesPerView: 5 },
+                        // when window width is >= 1024px
+                        1024: { slidesPerView: 6 },
+                      }}
+                    >
+                      {items.map((item) =>
+                        item.poster_path ? (
+                          <SwiperSlide
+                            key={item.id}
+                            className='swiper-poster-slide'
+                          >
+                            <Link to={`/media/${category}/${item.id}`}>
+                              <PosterCard
+                                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                                className='slider-poster-card poster-effect'
+                                imgAttrs={{
+                                  className: 'h-full',
+                                }}
+                              ></PosterCard>
+                            </Link>
+                          </SwiperSlide>
+                        ) : undefined,
+                      )}
+                    </Swiper>
+                  </div>
+                ),
+            )}
+          </>
+        ) : (
+          <>
+            <p>Loading...</p>
+          </>
         )}
       </div>
     </>
