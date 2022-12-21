@@ -116,7 +116,6 @@ function Person() {
       <PosterCard
         src={getProfilePicture(person) as string}
         className='relative z-10'
-        lazy={false}
       ></PosterCard>
 
       <div className='content-col w-full overflow-hidden relative p-5'>
