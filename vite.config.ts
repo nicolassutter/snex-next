@@ -30,7 +30,7 @@ export default defineConfig({
       imports: [
         'preact',
         {
-          'react-use': ['useEffectOnce'],
+          'react-use': ['useEffectOnce', 'useMount', 'useUnmount'],
           preact: ['FunctionComponent'],
           clsx: ['clsx'],
         },
