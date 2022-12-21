@@ -8,12 +8,11 @@ import {
   isShow,
   md,
 } from '#src/utils/index'
-import type { Cast, Movie, Show } from '#types'
+import type { Movie, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Link } from 'react-router-dom'
-import { sortBy, uniqBy } from 'lodash-es'
 
 function Media() {
   const params = useParams()
@@ -21,77 +20,10 @@ function Media() {
   const [media, setMedia] = useState<null | Movie | Show>()
   const [isLoading, setIsLoading] = useState(true)
   const arrPaths = useArrPaths(media)
-
-  /**
-   * Data for the box containing "Directors", "Produces" and "Writers"
-   */
-  const crewMetaInfo = useMemo(
-    () =>
-      [
-        {
-          name: 'Directors',
-          items: uniqBy(
-            media?.credits.crew.filter(
-              (crewMember) => crewMember.department === 'Directing',
-            ) ?? [],
-            'id',
-          ),
-        },
-        {
-          name: 'Producers',
-          items: uniqBy(
-            media?.credits.crew.filter(
-              (crewMember) => crewMember.department === 'Production',
-            ) ?? [],
-            'id',
-          ),
-        },
-        {
-          name: 'Writers',
-          items: uniqBy(
-            media?.credits.crew.filter(
-              (crewMember) => crewMember.department === 'Writing',
-            ) ?? [],
-            'id',
-          ),
-        },
-      ] as const,
-    [media],
-  )
-
-  const trailers = useMemo(() => {
-    return media?.videos.results.filter((video) => {
-      return (
-        video.type === 'Trailer' &&
-        video.site === 'YouTube' &&
-        video.official === true
-      )
-    })
-  }, [media])
-
-  const videos = useMemo(() => {
-    return media?.videos.results.filter((video) => {
-      return (
-        video.type !== 'Trailer' &&
-        video.official === true &&
-        video.type !== 'Featurette'
-      )
-    })
-  }, [media])
-
-  const videosData = useMemo(
-    () => [
-      {
-        name: 'Trailers',
-        items: trailers,
-      },
-      {
-        name: 'Videos',
-        items: videos,
-      },
-    ],
-    [trailers, videos],
-  )
+  const crewMetaInfo = useMediaCrew(media)
+  const { videosData } = useMediaVideos(media)
+  const people = useMediaPeople(media)
+  const mediaType = useMediaType()
 
   /**
    * Data for the sliders ("Recommended", "Similiar")
@@ -124,59 +56,6 @@ function Media() {
 
     return hours > 0 ? `${hours}h${leftoverMinutes}m` : `${leftoverMinutes}m`
   }
-
-  /**
-   * Computes the profiles shown in the "People section"
-   */
-  const people = useMemo(() => {
-    // Crew members sorted by highest popularity fist
-    const crew = sortBy(
-      media?.credits.crew.slice(0, 10) ?? [],
-      (person) => person.popularity,
-    ).reverse()
-
-    // Cast members sorted by highest popularity fist
-    const cast = sortBy(
-      media?.credits.cast ?? [],
-      (person) => person.popularity,
-    ).reverse()
-
-    // The crew people are always displayed first
-    const _people = [...crew, ...cast].reduce((acc, person, _index) => {
-      if (!person.profile_path) {
-        return acc
-      }
-
-      // No duplicate persons (e.g a director also played a character)
-      const alreadyPresentIndex = acc.findIndex(
-        (originalPerson) => originalPerson.id === person.id,
-      )
-
-      const isPresent = alreadyPresentIndex > -1
-
-      const isActor = Boolean(person.character)
-
-      // We do not display uncredited persons
-      const isUncreditedCharacter = Boolean(
-        isActor && person.character?.includes('uncredited'),
-      )
-
-      if (!isPresent && !isUncreditedCharacter) {
-        acc.push(person)
-      } else if (!isActor) {
-        // Fuse the duplicate's job with the one already present
-        acc[
-          alreadyPresentIndex
-        ].job = `${acc[alreadyPresentIndex].job}, ${person.job}`
-      }
-
-      return acc
-    }, [] as Cast[])
-
-    return _people
-  }, [media])
-
-  const mediaType = useMediaType()
 
   async function fetchData() {
     if (!params.id) {
