@@ -30,16 +30,15 @@ export function useArrPaths(media: Show | Movie | null | undefined) {
       : undefined
   }, [media])
 
-  return [
-    {
-      name: 'radarr',
+  return {
+    radarr: {
       logo: 'https://raw.githubusercontent.com/Radarr/radarr.github.io/master/logo/radarr.svg',
       path: radarrPath,
     },
-    {
-      name: 'sonarr',
+
+    sonarr: {
       logo: 'https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/Sonarr.svg',
       path: sonarrPath,
     },
-  ] as const
+  }
 }

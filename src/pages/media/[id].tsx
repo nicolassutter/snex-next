@@ -317,28 +317,25 @@ function Media() {
               ))}
             </ul>
 
-            <div className='flex mt-5'>
-              {arrPaths.map(({ name, logo, path }) => (
-                <>
-                  {((name === 'radarr' && isMovie(media)) ||
-                    (name === 'sonarr' && isShow(media))) && (
-                    <a
-                      className='btn'
-                      target='_blank'
-                      href={path}
-                      rel='noreferrer'
-                    >
-                      <img
-                        src={logo}
-                        alt=''
-                        className='w-5 mr-1'
-                      />
-                      {name === 'radarr' ? 'Add to Radarr' : 'Add to Sonarr'}
-                    </a>
-                  )}
-                </>
-              ))}
-            </div>
+            {arrPaths.radarr.path || arrPaths.sonarr.path ? (
+              <a
+                className='btn mt-5'
+                target='_blank'
+                href={
+                  isShow(media) ? arrPaths.sonarr.path : arrPaths.radarr.path
+                }
+                rel='noreferrer'
+              >
+                <img
+                  src={
+                    isShow(media) ? arrPaths.sonarr.logo : arrPaths.radarr.logo
+                  }
+                  alt=''
+                  className='w-5 mr-1'
+                />
+                {isShow(media) ? 'Add to Sonarr' : 'Add to Radarr'}
+              </a>
+            ) : undefined}
 
             <h2 className='section-title mt-16'>People</h2>
 
