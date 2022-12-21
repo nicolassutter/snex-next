@@ -1,13 +1,12 @@
 import { classesInAttrs } from '#src/utils/index'
 import type { JSX, FunctionComponent } from 'preact'
-import { useIntersection } from 'react-use'
+import { useMount } from 'react-use'
 
 interface Props {
   src: string
   alt?: string
   imgAttrs?: Omit<JSX.HTMLAttributes<HTMLImageElement>, 'src' | 'alt'>
   className?: string
-  lazy?: boolean
 }
 
 export const PosterCard: FunctionComponent<Props> = ({
@@ -15,25 +14,18 @@ export const PosterCard: FunctionComponent<Props> = ({
   alt,
   imgAttrs,
   className,
-  lazy,
 }) => {
   const img = useRef<HTMLImageElement | null>(null)
-  const useLazy = lazy === true || lazy === undefined
   const [hasLoaded, setHasLoaded] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
 
-  // If we lazy load the image: false by default
-  // If we do not lazy load the image: true by default
-  const [hasIntersected, setHasIntersected] = useState(!useLazy)
-
-  if (useLazy) {
-    const intersection = useIntersection(img, {})
-
-    useEffect(() => {
-      if (intersection?.isIntersecting) {
-        setHasIntersected(true)
-      }
-    }, [intersection])
-  }
+  /**
+   * We only add the `src` to the image once the component is mounted
+   * This will make `loading='lazy` work as expected
+   */
+  useMount(() => {
+    setHasMounted(true)
+  })
 
   return (
     <div className={clsx('poster-card relative aspect-[2/3]', className)}>
@@ -69,11 +61,11 @@ export const PosterCard: FunctionComponent<Props> = ({
           classesInAttrs(imgAttrs),
           'aspect-[2/3] object-cover select-none rounded-md relative z-20',
         )}
-        src={hasIntersected ? src : undefined}
+        src={hasMounted ? src : undefined}
         alt={alt}
         draggable={false}
         onLoad={() => setHasLoaded(true)}
-        // loading='lazy' does not work
+        loading='lazy'
       />
     </div>
   )
