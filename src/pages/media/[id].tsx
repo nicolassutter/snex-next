@@ -8,7 +8,7 @@ import {
   isShow,
   md,
 } from '#src/utils/index'
-import type { Movie, Show } from '#types'
+import type { ImdbData, Movie, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
@@ -18,6 +18,7 @@ function Media() {
   const params = useParams()
   const navigate = useNavigate()
   const [media, setMedia] = useState<null | Movie | Show>()
+  const [imdbData, setImdbData] = useState<ImdbData>()
   const [isLoading, setIsLoading] = useState(true)
   const arrPaths = useArrPaths(media)
   const crewMetaInfo = useMediaCrew(media)
@@ -66,6 +67,14 @@ function Media() {
     try {
       setIsLoading(true)
       const res = await api.getMedia({ type: mediaType, id: params.id })
+
+      // We do not await to avoid blocking users
+      if (res.external_ids.imdb_id) {
+        api
+          .getImdbInfo(res.external_ids.imdb_id)
+          .then((data) => setImdbData(data))
+      }
+
       setMedia(res)
     } catch (error) {
       /* error */
@@ -117,6 +126,9 @@ function Media() {
                   {isShow(media) &&
                     new Date(media.first_air_date).getFullYear()}
                 </li>
+
+                {/* imdb score */}
+                {imdbData?.score ? <li>{imdbData?.score}</li> : undefined}
 
                 {/* runtime */}
                 <li>

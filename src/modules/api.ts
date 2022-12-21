@@ -1,4 +1,5 @@
 import type {
+  ImdbData,
   MediaType,
   Movie,
   SearchMovie,
@@ -207,16 +208,12 @@ export const api = {
   },
 
   async getImdbInfo(imdb_id: string) {
-    try {
-      if (!imdb_id) {
-        throw new Error('No id was given')
-      }
-
-      const { data } = await $fetch(`/entry/${imdb_id}/info`)
-
-      return data
-    } catch (error) {
-      return []
+    if (!imdb_id) {
+      throw new Error('No id was given')
     }
+
+    const { data } = await $fetch<{ data: ImdbData }>(`/entry/${imdb_id}/info`)
+
+    return data
   },
 }

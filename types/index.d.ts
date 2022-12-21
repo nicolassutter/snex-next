@@ -160,3 +160,21 @@ export interface SearchShow extends Show {
 export interface SearchPerson extends Person {
   media_type: 'person'
 }
+
+export interface ImdbData {
+  score: number
+  reviews: {
+    rating: number
+    title: string
+    author: string
+    author_details: {
+      username: string
+      rating: number
+    }
+    url: string
+    content: string
+    date: string
+    created_at: string
+    updated_at: string
+  }[]
+}
