@@ -65,7 +65,7 @@ export const populateIndexStore = action(
         const result = await fn()
 
         // Mutates the store directly (without `store.setKey()`)
-        set(storeValue, `${key}.items`, result.data?.results ?? [])
+        set(storeValue, `${key}.items`, result?.results ?? [])
       }),
     )
 

@@ -1,10 +1,10 @@
-import type { AxiosRequestConfig, AxiosError } from 'axios'
-import axios from 'axios'
 import Fastify from 'fastify'
 import { load as loadCheerio } from 'cheerio'
 import httpProxy from '@fastify/http-proxy'
 import awsLambdaFastify from '@fastify/aws-lambda'
 import cors from '@fastify/cors'
+import type { FetchError } from 'ohmyfetch'
+import { $fetch } from 'ohmyfetch'
 
 const fastify = Fastify({})
 
@@ -25,16 +25,13 @@ const imdb_root = 'https://www.imdb.com'
 
 const get_reviews = async (imdb_id: string) => {
   try {
-    const axiosConfig: AxiosRequestConfig = {
-      url: `${imdb_root}/title/${imdb_id}/reviews`,
-      method: 'get',
+    const data = await $fetch<string>(`${imdb_root}/title/${imdb_id}/reviews`, {
       params: {
         sort: 'helpfulnessScore',
         dir: 'desc',
       },
-    }
+    })
 
-    const { data } = await axios(axiosConfig)
     const $ = loadCheerio(data)
     const reviews = $('.review-container .lister-item-content')
 
@@ -113,13 +110,10 @@ fastify.register(
           params: { imdb_id },
         } = request
 
-        const axiosConfig: AxiosRequestConfig = {
-          url: `${imdb_root}/title/${imdb_id}`,
-          method: 'get',
-        }
-
-        const get_info = async () => (await axios(axiosConfig)).data
-        const reqs = [get_reviews(imdb_id), get_info()]
+        const reqs = [
+          get_reviews(imdb_id),
+          $fetch(`${imdb_root}/title/${imdb_id}`),
+        ]
 
         const [reviews, page_html] = await Promise.all(reqs)
 
@@ -137,12 +131,12 @@ fastify.register(
             },
           })
       } catch (error) {
-        const err = error as AxiosError
+        const err = error as FetchError
 
         return reply
           .status(err.response?.status || 500)
           .headers(headers)
-          .send(err.response?.data || {})
+          .send(err.response?._data || {})
       }
     })
 

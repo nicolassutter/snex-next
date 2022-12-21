@@ -6,14 +6,14 @@ import type {
   SearchShow,
   Show,
 } from '#types'
-import { default as _axios } from 'axios'
 import { sortBy } from 'lodash-es'
+import { $fetch as _$fetch } from 'ohmyfetch'
 
 const suffix = '/.netlify/functions/api'
 
 const API_URL = import.meta.env.PROD ? suffix : `http://localhost:8888${suffix}`
 
-const axios = _axios.create({
+const $fetch = _$fetch.create({
   baseURL: API_URL,
 })
 
@@ -29,23 +29,23 @@ interface Options {
 
 export const api = {
   getPopularMovies() {
-    return axios.get<{ results: Movie[] }>('/tmdb/movie/popular')
+    return $fetch<{ results: Movie[] }>('/tmdb/movie/popular')
   },
 
   getTopMovies() {
-    return axios.get<{ results: Movie[] }>('/tmdb/movie/top_rated')
+    return $fetch<{ results: Movie[] }>('/tmdb/movie/top_rated')
   },
 
   getUpcomingMovies() {
-    return axios.get<{ results: Movie[] }>('/tmdb/movie/upcoming')
+    return $fetch<{ results: Movie[] }>('/tmdb/movie/upcoming')
   },
 
   getPopularShows() {
-    return axios.get<{ results: Show[] }>('/tmdb/tv/popular')
+    return $fetch<{ results: Show[] }>('/tmdb/tv/popular')
   },
 
   getTopShows() {
-    return axios.get<{ results: Show[] }>('/tmdb/tv/top_rated')
+    return $fetch<{ results: Show[] }>('/tmdb/tv/top_rated')
   },
 
   async getDiscoverShows(options: Partial<Options> = {}) {
@@ -76,9 +76,7 @@ export const api = {
       }
     }
 
-    const {
-      data: { results: shows },
-    } = await axios.get(`/discover/tv`, {
+    const { results: shows } = await $fetch(`/discover/tv`, {
       params: {
         page: params.page,
         limit: params.limit,
@@ -117,9 +115,7 @@ export const api = {
       }
     }
 
-    const {
-      data: { results: movies },
-    } = await axios.get(`/discover/movie`, {
+    const { results: movies } = await $fetch(`/discover/movie`, {
       params: {
         page: params.page,
         limit: params.limit,
@@ -140,9 +136,7 @@ export const api = {
      * TODO: Promise.all()
      */
     for await (const index of pagesArray) {
-      const {
-        data: { results: searchResults },
-      } = await axios.get<{
+      const { results: searchResults } = await $fetch<{
         results: (SearchMovie | SearchShow | SearchPerson)[]
       }>(`/tmdb/search/multi`, {
         params: {
@@ -178,7 +172,7 @@ export const api = {
       'external_ids',
     ].toString()
 
-    const { data } = await axios.get(`/tmdb/${type}/${id}`, {
+    const data = await $fetch<Movie | Show>(`/tmdb/${type}/${id}`, {
       params: { append_to_response },
     })
 
@@ -187,29 +181,25 @@ export const api = {
 
   async getSeason(params: any) {
     const { showId, seasonId } = params
-    const { data: season } = await axios.get(`/tv/${showId}/season/${seasonId}`)
+    const { data: season } = await $fetch(`/tv/${showId}/season/${seasonId}`)
 
     return season
   },
 
   getMovieGenres: async () => {
-    const {
-      data: { genres },
-    } = await axios.get(`/genre/movie/list`)
+    const { genres } = await $fetch(`/genre/movie/list`)
 
     return genres
   },
 
   getShowGenres: async () => {
-    const {
-      data: { genres },
-    } = await axios.get(`/genre/tv/list`)
+    const { genres } = await $fetch(`/genre/tv/list`)
 
     return genres
   },
 
   async getPerson(id: string | number) {
-    const { data } = await axios.get(
+    const data = await $fetch(
       `/tmdb/person/${id}?append_to_response=movie_credits,tv_credits`,
     )
 
@@ -222,9 +212,7 @@ export const api = {
         throw new Error('No id was given')
       }
 
-      const {
-        data: { data },
-      } = await axios.get(`/entry/${imdb_id}/info`)
+      const { data } = await $fetch(`/entry/${imdb_id}/info`)
 
       return data
     } catch (error) {
