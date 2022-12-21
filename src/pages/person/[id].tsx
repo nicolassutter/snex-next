@@ -111,93 +111,103 @@ function Person() {
     fetchData()
   }, [params.id])
 
-  return !isLoading && person ? (
-    <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
-      <PosterCard
-        src={getProfilePicture(person) as string}
-        className='relative z-10'
-      ></PosterCard>
+  return (
+    <>
+      <Helmet>
+        <title>{isLoading ? `SNEX` : `${person?.name} | SNEX`}</title>
+      </Helmet>
 
-      <div className='content-col w-full overflow-hidden relative p-5'>
-        <h1 className='font-bold text-4xl'>{person.name}</h1>
+      {!isLoading && person ? (
+        <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
+          <PosterCard
+            src={getProfilePicture(person) as string}
+            className='relative z-10'
+          ></PosterCard>
 
-        <div className='mt-3 flex space-x-1 max-w-full overflow-x-auto'>
-          <div className='badge badge-md badge-outline'>
-            {person.known_for_department}
+          <div className='content-col w-full overflow-hidden relative p-5'>
+            <h1 className='font-bold text-4xl'>{person.name}</h1>
+
+            <div className='mt-3 flex space-x-1 max-w-full overflow-x-auto'>
+              <div className='badge badge-md badge-outline'>
+                {person.known_for_department}
+              </div>
+            </div>
+
+            <div
+              className='mt-5 max-w-3xl max-h-60 overflow-y-auto'
+              dangerouslySetInnerHTML={{
+                __html: md.render(person?.biography ?? ''),
+              }}
+            />
+
+            {
+              <ul className='mt-5'>
+                {personInfo.map((info) => (
+                  <li
+                    key={info.name}
+                    className='border-y-[1px] border-base-content flex py-2 first:border-b-0 last:border-t-0'
+                  >
+                    <span className='font-bold'>{info.name}:</span>
+                    <span className='ml-2'>{info.value}</span>
+                  </li>
+                ))}
+              </ul>
+            }
+
+            {sliders.map((slider) =>
+              // Display slider only if it has items
+              slider.items?.length ? (
+                <div key={`slider-${slider.name}`}>
+                  <h2 className='text-3xl font-bold mt-16'>{slider.name}</h2>
+
+                  <Swiper
+                    modules={[A11y, Mousewheel]}
+                    spaceBetween={15}
+                    className='mt-5'
+                    mousewheel={{
+                      enabled: true,
+                      forceToAxis: true,
+                    }}
+                    breakpoints={{
+                      0: { slidesPerView: 1 },
+                      // when window width is >= 320px
+                      320: { slidesPerView: 2 },
+                      // when window width is >= 640px
+                      640: { slidesPerView: 4 },
+                      // when window width is >= 768px
+                      768: { slidesPerView: 5 },
+                      // when window width is >= 1024px
+                      1024: { slidesPerView: 6 },
+                    }}
+                  >
+                    {slider.items?.map((sliderItem) => (
+                      <SwiperSlide
+                        key={`recommendation-${sliderItem.id}`}
+                        className='swiper-poster-slide'
+                      >
+                        <Link
+                          to={`/media/${slider.mediaType}/${sliderItem.id}`}
+                        >
+                          <PosterCard
+                            src={getPosterPicture(sliderItem) as string}
+                            className='slider-poster-card poster-effect'
+                            imgAttrs={{
+                              className: 'h-full',
+                            }}
+                          ></PosterCard>
+                        </Link>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              ) : undefined,
+            )}
           </div>
         </div>
-
-        <div
-          className='mt-5 max-w-3xl max-h-60 overflow-y-auto'
-          dangerouslySetInnerHTML={{
-            __html: md.render(person?.biography ?? ''),
-          }}
-        />
-
-        {
-          <ul className='mt-5'>
-            {personInfo.map((info) => (
-              <li
-                key={info.name}
-                className='border-y-[1px] border-base-content flex py-2 first:border-b-0 last:border-t-0'
-              >
-                <span className='font-bold'>{info.name}:</span>
-                <span className='ml-2'>{info.value}</span>
-              </li>
-            ))}
-          </ul>
-        }
-
-        {sliders.map((slider) =>
-          // Display slider only if it has items
-          slider.items?.length ? (
-            <div key={`slider-${slider.name}`}>
-              <h2 className='text-3xl font-bold mt-16'>{slider.name}</h2>
-
-              <Swiper
-                modules={[A11y, Mousewheel]}
-                spaceBetween={15}
-                className='mt-5'
-                mousewheel={{
-                  enabled: true,
-                  forceToAxis: true,
-                }}
-                breakpoints={{
-                  0: { slidesPerView: 1 },
-                  // when window width is >= 320px
-                  320: { slidesPerView: 2 },
-                  // when window width is >= 640px
-                  640: { slidesPerView: 4 },
-                  // when window width is >= 768px
-                  768: { slidesPerView: 5 },
-                  // when window width is >= 1024px
-                  1024: { slidesPerView: 6 },
-                }}
-              >
-                {slider.items?.map((sliderItem) => (
-                  <SwiperSlide
-                    key={`recommendation-${sliderItem.id}`}
-                    className='swiper-poster-slide'
-                  >
-                    <Link to={`/media/${slider.mediaType}/${sliderItem.id}`}>
-                      <PosterCard
-                        src={getPosterPicture(sliderItem) as string}
-                        className='slider-poster-card poster-effect'
-                        imgAttrs={{
-                          className: 'h-full',
-                        }}
-                      ></PosterCard>
-                    </Link>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          ) : undefined,
-        )}
-      </div>
-    </div>
-  ) : (
-    <p>Loading...</p>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
   )
 }
 

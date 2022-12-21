@@ -33,6 +33,7 @@ export default defineConfig({
           'react-use': ['useEffectOnce', 'useMount', 'useUnmount'],
           preact: ['FunctionComponent'],
           clsx: ['clsx'],
+          'react-helmet': ['Helmet'],
         },
       ],
       dirs: ['./src/hooks'],

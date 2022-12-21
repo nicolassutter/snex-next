@@ -24,7 +24,6 @@ function Search() {
       const res = await api.searchMedia(query as string)
       setResults(res)
       setHasSearched(true)
-      console.log(res)
     } catch (error) {
       navigate('/')
     } finally {
@@ -44,45 +43,53 @@ function Search() {
     search()
   }, [query])
 
-  return query ? (
-    <div className='search-page'>
-      {!isLoading && results.length && hasSearched ? (
-        <ul className='grid grid-cols-6 gap-5'>
-          {results.map((media) => (
-            <li key={`media-${media.id}`}>
-              <Link
-                to={
-                  isPerson(media)
-                    ? `/person/${media.id}`
-                    : `/media/${media.media_type}/${media.id}`
-                }
-                className='h-full w-full'
-              >
-                <PosterCard
-                  className='poster-effect'
-                  src={
-                    isPerson(media)
-                      ? (getProfilePicture(media) as string)
-                      : (getPosterPicture(media) as string)
-                  }
-                  imgAttrs={{
-                    className: 'h-full',
-                  }}
-                ></PosterCard>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : undefined}
+  return (
+    <>
+      <Helmet>
+        <title>Results for &quot;{query}&quot; | SNEX</title>
+      </Helmet>
 
-      {!isLoading && !results.length && hasSearched ? (
-        <p>No results found.</p>
-      ) : undefined}
+      {query ? (
+        <div className='search-page'>
+          {!isLoading && results.length && hasSearched ? (
+            <ul className='grid grid-cols-6 gap-5'>
+              {results.map((media) => (
+                <li key={`media-${media.id}`}>
+                  <Link
+                    to={
+                      isPerson(media)
+                        ? `/person/${media.id}`
+                        : `/media/${media.media_type}/${media.id}`
+                    }
+                    className='h-full w-full'
+                  >
+                    <PosterCard
+                      className='poster-effect'
+                      src={
+                        isPerson(media)
+                          ? (getProfilePicture(media) as string)
+                          : (getPosterPicture(media) as string)
+                      }
+                      imgAttrs={{
+                        className: 'h-full',
+                      }}
+                    ></PosterCard>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : undefined}
 
-      {isLoading && <p>Loading...</p>}
-    </div>
-  ) : (
-    <></>
+          {!isLoading && !results.length && hasSearched ? (
+            <p>No results found.</p>
+          ) : undefined}
+
+          {isLoading && <p>Loading...</p>}
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   )
 }
 

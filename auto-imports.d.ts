@@ -2,6 +2,7 @@
 export {}
 declare global {
   const FunctionComponent: typeof import('preact')['FunctionComponent']
+  const Helmet: typeof import('react-helmet')['Helmet']
   const clsx: typeof import('clsx')['clsx']
   const movieRoutePatten: typeof import('./src/hooks/useMediaRoute')['movieRoutePatten']
   const tvRoutePatten: typeof import('./src/hooks/useMediaRoute')['tvRoutePatten']

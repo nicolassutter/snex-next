@@ -201,214 +201,225 @@ function Media() {
     fetchData()
   }, [params.id])
 
-  return !isLoading && media ? (
-    <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
-      <PosterCard
-        src={thumbnail}
-        className='relative z-10'
-      ></PosterCard>
+  return (
+    <>
+      <Helmet>
+        <title>{isLoading ? `SNEX` : `${media?.title} | SNEX`}</title>
+      </Helmet>
 
-      <div className='content-col w-full overflow-hidden relative p-5'>
-        {/* cover image */}
-        <img
-          className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm w-full'
-          src={cover}
-          alt=''
-          aria-hidden={true}
-        />
+      {!isLoading && media ? (
+        <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
+          <PosterCard
+            src={thumbnail}
+            className='relative z-10'
+          ></PosterCard>
 
-        <h1 className='font-bold text-4xl'>{media?.title ?? media?.name}</h1>
+          <div className='content-col w-full overflow-hidden relative p-5'>
+            {/* cover image */}
+            <img
+              className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm w-full'
+              src={cover}
+              alt=''
+              aria-hidden={true}
+            />
 
-        <div className='base-media-info'>
-          <ul className='list-disc flex space-x-5'>
-            {/* year */}
-            <li className='list-none'>
-              {isMovie(media) && new Date(media.release_date).getFullYear()}
-              {isShow(media) && new Date(media.first_air_date).getFullYear()}
-            </li>
+            <h1 className='font-bold text-4xl'>
+              {media?.title ?? media?.name}
+            </h1>
 
-            {/* runtime */}
-            <li>
-              {isMovie(media) && minutesToHuman(media.runtime)}
-              {isShow(media) && (
-                <>
-                  {media.episode_run_time.length > 1 ? (
-                    // If there are multiple runtimes of episodes
+            <div className='base-media-info'>
+              <ul className='list-disc flex space-x-5'>
+                {/* year */}
+                <li className='list-none'>
+                  {isMovie(media) && new Date(media.release_date).getFullYear()}
+                  {isShow(media) &&
+                    new Date(media.first_air_date).getFullYear()}
+                </li>
+
+                {/* runtime */}
+                <li>
+                  {isMovie(media) && minutesToHuman(media.runtime)}
+                  {isShow(media) && (
                     <>
-                      {minutesToHuman(Math.min(...media.episode_run_time))}-
-                      {minutesToHuman(Math.max(...media.episode_run_time))}
+                      {media.episode_run_time.length > 1 ? (
+                        // If there are multiple runtimes of episodes
+                        <>
+                          {minutesToHuman(Math.min(...media.episode_run_time))}-
+                          {minutesToHuman(Math.max(...media.episode_run_time))}
+                        </>
+                      ) : (
+                        // If every episode is the same runtime
+                        <>{minutesToHuman(media.episode_run_time[0])}</>
+                      )}
                     </>
-                  ) : (
-                    // If every episode is the same runtime
-                    <>{minutesToHuman(media.episode_run_time[0])}</>
                   )}
-                </>
-              )}
-            </li>
+                </li>
 
-            {/* seasons count */}
-            {isShow(media) && media.number_of_seasons && (
-              <li>{media.number_of_seasons} seasons</li>
-            )}
+                {/* seasons count */}
+                {isShow(media) && media.number_of_seasons && (
+                  <li>{media.number_of_seasons} seasons</li>
+                )}
 
-            {/* episodes count */}
-            {isShow(media) && media.number_of_episodes && (
-              <li>{media.number_of_episodes} episodes</li>
-            )}
-          </ul>
-        </div>
-
-        <div className='genres mt-3 flex space-x-1 max-w-full overflow-x-auto'>
-          {media?.genres.map((genre) => (
-            <div
-              key={`genre-${genre.id}`}
-              className='genre badge badge-md badge-outline'
-            >
-              {genre.name}
+                {/* episodes count */}
+                {isShow(media) && media.number_of_episodes && (
+                  <li>{media.number_of_episodes} episodes</li>
+                )}
+              </ul>
             </div>
-          ))}
-        </div>
 
-        <div
-          className='mt-5 max-w-3xl'
-          dangerouslySetInnerHTML={{
-            __html: md.render(media?.overview ?? ''),
-          }}
-        />
+            <div className='genres mt-3 flex space-x-1 max-w-full overflow-x-auto'>
+              {media?.genres.map((genre) => (
+                <div
+                  key={`genre-${genre.id}`}
+                  className='genre badge badge-md badge-outline'
+                >
+                  {genre.name}
+                </div>
+              ))}
+            </div>
 
-        <ul className='mt-5'>
-          {crewMetaInfo.map((metaInfo) => (
-            <li
-              key={metaInfo.name}
-              className='border-y-[1px] border-base-content flex py-2 first:border-b-0 last:border-t-0'
+            <div
+              className='mt-5 max-w-3xl'
+              dangerouslySetInnerHTML={{
+                __html: md.render(media?.overview ?? ''),
+              }}
+            />
+
+            <ul className='mt-5'>
+              {crewMetaInfo.map((metaInfo) => (
+                <li
+                  key={metaInfo.name}
+                  className='border-y-[1px] border-base-content flex py-2 first:border-b-0 last:border-t-0'
+                >
+                  <span className='font-bold'>{metaInfo.name}:</span>
+
+                  <ul className='inline-flex ml-2 list-disc'>
+                    {metaInfo.items.length === 0 && <>-</>}
+
+                    {metaInfo.items?.slice(0, 4).map((crewMember) => (
+                      <li
+                        className='mr-5 first:list-none'
+                        key={`crew-member-${crewMember.id}-${metaInfo.name}`}
+                      >
+                        <Link
+                          to={`/person/${crewMember.id}`}
+                          className='link link-info'
+                        >
+                          {crewMember.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className='section-title mt-16'>People</h2>
+
+            <Collapse
+              maxHeight={500}
+              className='mt-5'
             >
-              <span className='font-bold'>{metaInfo.name}:</span>
-
-              <ul className='inline-flex ml-2 list-disc'>
-                {metaInfo.items.length === 0 && <>-</>}
-
-                {metaInfo.items?.slice(0, 4).map((crewMember) => (
+              <ul className='people-list grid grid-cols-6 gap-5'>
+                {people.map((person) => (
                   <li
-                    className='mr-5 first:list-none'
-                    key={`crew-member-${crewMember.id}-${metaInfo.name}`}
+                    className={`${person.id}`}
+                    key={`person-${person.id}-${person.department}`}
                   >
-                    <Link
-                      to={`/person/${crewMember.id}`}
-                      className='link link-info'
-                    >
-                      {crewMember.name}
+                    <Link to={`/person/${person.id}`}>
+                      <img
+                        src={getProfilePicture(person)}
+                        className='rounded-md'
+                        alt=''
+                      />
+                      <p>{person.name}</p>
+                      <p>{person.job ?? person.character}</p>
                     </Link>
                   </li>
                 ))}
               </ul>
-            </li>
-          ))}
-        </ul>
+            </Collapse>
 
-        <h2 className='section-title mt-16'>People</h2>
+            {videosData.map(({ name, items }) =>
+              items?.length ? (
+                <>
+                  <h2 className='section-title mt-16'>{name}</h2>
 
-        <Collapse
-          maxHeight={500}
-          className='mt-5'
-        >
-          <ul className='people-list grid grid-cols-6 gap-5'>
-            {people.map((person) => (
-              <li
-                className={`${person.id}`}
-                key={`person-${person.id}-${person.department}`}
-              >
-                <Link to={`/person/${person.id}`}>
-                  <img
-                    src={getProfilePicture(person)}
-                    className='rounded-md'
-                    alt=''
-                  />
-                  <p>{person.name}</p>
-                  <p>{person.job ?? person.character}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Collapse>
-
-        {videosData.map(({ name, items }) =>
-          items?.length ? (
-            <>
-              <h2 className='section-title mt-16'>{name}</h2>
-
-              <Collapse
-                maxHeight={500}
-                className='mt-5'
-              >
-                <ul className='trailers-list grid grid-cols-3 gap-5'>
-                  {items.map((video) => (
-                    <li key={`video-${video.id}`}>
-                      <iframe
-                        className='w-full aspect-video rounded-lg'
-                        src={`https://www.youtube.com/embed/${video.key}`}
-                        frameBorder='0'
-                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                        allowFullScreen
-                        loading='lazy'
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </Collapse>
-            </>
-          ) : undefined,
-        )}
-
-        {sliders.map((slider) =>
-          // Display slider only if it has items
-          slider.items?.length ? (
-            <div key={`slider-${slider.name}`}>
-              <h2 className='section-title mt-16'>{slider.name}</h2>
-
-              <Swiper
-                modules={[A11y, Mousewheel]}
-                spaceBetween={15}
-                className='mt-5'
-                mousewheel={{
-                  enabled: true,
-                  forceToAxis: true,
-                }}
-                breakpoints={{
-                  0: { slidesPerView: 1 },
-                  // when window width is >= 320px
-                  320: { slidesPerView: 2 },
-                  // when window width is >= 640px
-                  640: { slidesPerView: 4 },
-                  // when window width is >= 768px
-                  768: { slidesPerView: 5 },
-                  // when window width is >= 1024px
-                  1024: { slidesPerView: 6 },
-                }}
-              >
-                {slider.items?.map((sliderItem) => (
-                  <SwiperSlide
-                    key={`recommendation-${sliderItem.id}`}
-                    className='swiper-poster-slide'
+                  <Collapse
+                    maxHeight={500}
+                    className='mt-5'
                   >
-                    <Link to={`/media/${mediaType}/${sliderItem.id}`}>
-                      <PosterCard
-                        src={getPosterPicture(sliderItem) as string}
-                        className='slider-poster-card poster-effect'
-                        imgAttrs={{
-                          className: 'h-full',
-                        }}
-                      ></PosterCard>
-                    </Link>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          ) : undefined,
-        )}
-      </div>
-    </div>
-  ) : (
-    <p>Loading...</p>
+                    <ul className='trailers-list grid grid-cols-3 gap-5'>
+                      {items.map((video) => (
+                        <li key={`video-${video.id}`}>
+                          <iframe
+                            className='w-full aspect-video rounded-lg'
+                            src={`https://www.youtube.com/embed/${video.key}`}
+                            frameBorder='0'
+                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                            allowFullScreen
+                            loading='lazy'
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </Collapse>
+                </>
+              ) : undefined,
+            )}
+
+            {sliders.map((slider) =>
+              // Display slider only if it has items
+              slider.items?.length ? (
+                <div key={`slider-${slider.name}`}>
+                  <h2 className='section-title mt-16'>{slider.name}</h2>
+
+                  <Swiper
+                    modules={[A11y, Mousewheel]}
+                    spaceBetween={15}
+                    className='mt-5'
+                    mousewheel={{
+                      enabled: true,
+                      forceToAxis: true,
+                    }}
+                    breakpoints={{
+                      0: { slidesPerView: 1 },
+                      // when window width is >= 320px
+                      320: { slidesPerView: 2 },
+                      // when window width is >= 640px
+                      640: { slidesPerView: 4 },
+                      // when window width is >= 768px
+                      768: { slidesPerView: 5 },
+                      // when window width is >= 1024px
+                      1024: { slidesPerView: 6 },
+                    }}
+                  >
+                    {slider.items?.map((sliderItem) => (
+                      <SwiperSlide
+                        key={`recommendation-${sliderItem.id}`}
+                        className='swiper-poster-slide'
+                      >
+                        <Link to={`/media/${mediaType}/${sliderItem.id}`}>
+                          <PosterCard
+                            src={getPosterPicture(sliderItem) as string}
+                            className='slider-poster-card poster-effect'
+                            imgAttrs={{
+                              className: 'h-full',
+                            }}
+                          ></PosterCard>
+                        </Link>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              ) : undefined,
+            )}
+          </div>
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
   )
 }
 

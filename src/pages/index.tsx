@@ -43,59 +43,65 @@ function Index() {
   })
 
   return (
-    <div className='index-page p-2'>
-      {Object.entries(state).map(
-        ([key, { items, label, category }]) =>
-          items.length > 0 && (
-            <div
-              className='banner mt-10 first:mt-0'
-              key={key}
-            >
-              <h2 className='text-3xl font-bold'>{label}</h2>
+    <>
+      <Helmet>
+        <title>SNEX</title>
+      </Helmet>
 
-              <Swiper
-                modules={[A11y, Mousewheel]}
-                spaceBetween={15}
-                className='mt-5'
-                mousewheel={{
-                  enabled: true,
-                  forceToAxis: true,
-                }}
-                breakpoints={{
-                  0: { slidesPerView: 1 },
-                  // when window width is >= 320px
-                  320: { slidesPerView: 2 },
-                  // when window width is >= 640px
-                  640: { slidesPerView: 4 },
-                  // when window width is >= 768px
-                  768: { slidesPerView: 5 },
-                  // when window width is >= 1024px
-                  1024: { slidesPerView: 6 },
-                }}
+      <div className='index-page p-2'>
+        {Object.entries(state).map(
+          ([key, { items, label, category }]) =>
+            items.length > 0 && (
+              <div
+                className='banner mt-10 first:mt-0'
+                key={key}
               >
-                {items.map((item) =>
-                  item.poster_path ? (
-                    <SwiperSlide
-                      key={item.id}
-                      className='swiper-poster-slide'
-                    >
-                      <Link to={`/media/${category}/${item.id}`}>
-                        <PosterCard
-                          src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                          className='slider-poster-card poster-effect'
-                          imgAttrs={{
-                            className: 'h-full',
-                          }}
-                        ></PosterCard>
-                      </Link>
-                    </SwiperSlide>
-                  ) : undefined,
-                )}
-              </Swiper>
-            </div>
-          ),
-      )}
-    </div>
+                <h2 className='text-3xl font-bold'>{label}</h2>
+
+                <Swiper
+                  modules={[A11y, Mousewheel]}
+                  spaceBetween={15}
+                  className='mt-5'
+                  mousewheel={{
+                    enabled: true,
+                    forceToAxis: true,
+                  }}
+                  breakpoints={{
+                    0: { slidesPerView: 1 },
+                    // when window width is >= 320px
+                    320: { slidesPerView: 2 },
+                    // when window width is >= 640px
+                    640: { slidesPerView: 4 },
+                    // when window width is >= 768px
+                    768: { slidesPerView: 5 },
+                    // when window width is >= 1024px
+                    1024: { slidesPerView: 6 },
+                  }}
+                >
+                  {items.map((item) =>
+                    item.poster_path ? (
+                      <SwiperSlide
+                        key={item.id}
+                        className='swiper-poster-slide'
+                      >
+                        <Link to={`/media/${category}/${item.id}`}>
+                          <PosterCard
+                            src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                            className='slider-poster-card poster-effect'
+                            imgAttrs={{
+                              className: 'h-full',
+                            }}
+                          ></PosterCard>
+                        </Link>
+                      </SwiperSlide>
+                    ) : undefined,
+                  )}
+                </Swiper>
+              </div>
+            ),
+        )}
+      </div>
+    </>
   )
 }
 
