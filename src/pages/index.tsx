@@ -41,6 +41,8 @@ function Index() {
         setLastIndexFetchTime(new Date().getTime())
         setIsLoading(false)
       })
+    } else {
+      setIsLoading(false)
     }
   })
 
