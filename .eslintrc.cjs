@@ -19,13 +19,6 @@ module.exports = {
     'comma-dangle': 'off',
     "brace-style'": 'off',
     'no-undef': 'off',
-    indent: [
-      'error',
-      2,
-      {
-        SwitchCase: 1,
-      },
-    ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
