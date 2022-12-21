@@ -26,7 +26,7 @@ function Media() {
   const mediaType = useMediaType()
 
   /**
-   * Data for the sliders ("Recommended", "Similiar")
+   * Data for the sliders ("Recommended", "Similar")
    */
   const sliders = useMemo(() => {
     return [
