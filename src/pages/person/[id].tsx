@@ -183,7 +183,7 @@ function Person() {
                     <Link to={`/media/${slider.mediaType}/${sliderItem.id}`}>
                       <PosterCard
                         src={getPosterPicture(sliderItem) as string}
-                        className='slider-poster-card'
+                        className='slider-poster-card poster-effect'
                         imgAttrs={{
                           className: 'h-full',
                         }}

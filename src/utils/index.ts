@@ -1,6 +1,6 @@
 import type { JSX } from 'preact'
 import MarkdownIt from 'markdown-it'
-import type { Movie, Show } from '#types'
+import type { Movie, Person, Show } from '#types'
 
 export async function makePromise<T extends (...args: any[]) => Promise<any>>(
   cb: T,
@@ -8,12 +8,29 @@ export async function makePromise<T extends (...args: any[]) => Promise<any>>(
   return cb()
 }
 
-export function isMovie(param: Movie | Show): param is Movie {
-  return !('number_of_episodes' in param)
+export function isMovie(param: Movie | Show | Person): param is Movie {
+  return (
+    // A movie cannot have number_of_episodes
+    !('number_of_episodes' in param) &&
+    // Either media_type is not in param
+    (!('media_type' in param) ||
+      // Or media_type is defined and is 'movie'
+      ('media_type' in param && param.media_type === 'movie'))
+  )
 }
 
-export function isShow(param: Movie | Show): param is Show {
-  return 'number_of_episodes' in param
+export function isShow(param: Movie | Show | Person): param is Show {
+  return (
+    'number_of_episodes' in param ||
+    ('media_type' in param && param.media_type === 'tv')
+  )
+}
+
+export function isPerson(param: Movie | Show | Person): param is Person {
+  return (
+    'profile_path' in param ||
+    ('media_type' in param && param.media_type === 'person')
+  )
 }
 
 export function classesInAttrs(attrs?: JSX.HTMLAttributes<any>) {

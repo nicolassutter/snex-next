@@ -82,7 +82,7 @@ function Index() {
                       <Link to={`/media/${category}/${item.id}`}>
                         <PosterCard
                           src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                          className='slider-poster-card'
+                          className='slider-poster-card poster-effect'
                           imgAttrs={{
                             className: 'h-full',
                           }}

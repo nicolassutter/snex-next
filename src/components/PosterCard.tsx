@@ -28,7 +28,12 @@ export const PosterCard: FunctionComponent<Props> = ({
   })
 
   return (
-    <div className={clsx('poster-card relative aspect-[2/3]', className)}>
+    <div
+      className={clsx(
+        'poster-card relative aspect-[2/3] rounded-md',
+        className,
+      )}
+    >
       {!hasLoaded && (
         <span className='card-loader aspect-[2/3] absolute z-10 w-full rounded-md flex items-center justify-center bg-base-200'>
           <svg

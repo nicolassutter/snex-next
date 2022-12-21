@@ -68,13 +68,17 @@
   }
 }
 
-.slider-poster-card {
-  height: 100%;
-  @apply transition-all border-[3px] border-transparent rounded-md overflow-hidden;
+.poster-effect {
+  @apply transition-all border-[3px] border-transparent overflow-hidden;
 
   &:hover {
     @apply scale-[0.99] border-accent;
   }
+}
+
+.slider-poster-card {
+  height: 100%;
+  @apply rounded-md;
 }
 
 .section-title {

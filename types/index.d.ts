@@ -120,6 +120,7 @@ export interface Show extends Common {
 }
 
 export interface Person {
+  id: number
   name: string
   profile_path: string
   movie_credits: Credits
@@ -147,3 +148,15 @@ export type Department = LiteralUnion<
   | 'Costume & Make-Up',
   string
 >
+
+export interface SearchMovie extends Movie {
+  media_type: MediaType
+}
+
+export interface SearchShow extends Show {
+  media_type: MediaType
+}
+
+export interface SearchPerson extends Person {
+  media_type: 'person'
+}

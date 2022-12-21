@@ -1,5 +1,13 @@
-import type { MediaType, Movie, Show } from '#types'
+import type {
+  MediaType,
+  Movie,
+  SearchMovie,
+  SearchPerson,
+  SearchShow,
+  Show,
+} from '#types'
 import { default as _axios } from 'axios'
+import { sortBy } from 'lodash-es'
 
 const suffix = '/.netlify/functions/api'
 
@@ -122,11 +130,11 @@ export const api = {
     return movies
   },
 
-  async searchMedia(searchValue: any) {
+  async searchMedia(query: string) {
     const pages = 2
     const pagesArray = Array.from({ length: pages }, (_, index) => index + 1)
 
-    let results: any[] = []
+    let results: (SearchMovie | SearchShow | SearchPerson)[] = []
 
     /**
      * TODO: Promise.all()
@@ -134,9 +142,11 @@ export const api = {
     for await (const index of pagesArray) {
       const {
         data: { results: searchResults },
-      } = await axios.get(`/search/multi`, {
+      } = await axios.get<{
+        results: (SearchMovie | SearchShow | SearchPerson)[]
+      }>(`/tmdb/search/multi`, {
         params: {
-          query: searchValue,
+          query,
           page: index,
         },
       })
@@ -144,7 +154,16 @@ export const api = {
       results = [...results, ...searchResults]
     }
 
-    return results
+    return sortBy(
+      results.filter((result) => {
+        if (result.media_type === 'person') {
+          return result.profile_path
+        }
+
+        return result.poster_path
+      }),
+      'popularity',
+    ).reverse()
   },
 
   async getMedia({ type, id }: { type: MediaType; id: string }) {

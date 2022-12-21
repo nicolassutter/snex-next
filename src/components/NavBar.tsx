@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import { Menu } from '@headlessui/react'
 import IconMenu from '~icons/carbon/overflow-menu-horizontal'
@@ -9,6 +9,8 @@ interface Props {
 }
 
 export function NavBar({ className }: Props) {
+  const [searchValue, setSearchValue] = useState('')
+  const navigate = useNavigate()
   const [items] = useState([
     {
       _key: uuid(),
@@ -26,12 +28,18 @@ export function NavBar({ className }: Props) {
     [],
   )
 
-  useEffectOnce(() => {
-    window.addEventListener('scroll', onScroll)
+  function onSubmit(event: Event) {
+    event.preventDefault()
+    // Navigate to search
+    navigate(`/search?q=${searchValue}`)
+  }
 
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-    }
+  useMount(() => {
+    window.addEventListener('scroll', onScroll)
+  })
+
+  useUnmount(() => {
+    window.removeEventListener('scroll', onScroll)
   })
 
   return (
@@ -53,13 +61,20 @@ export function NavBar({ className }: Props) {
         </div>
 
         <div className='flex-none gap-2'>
-          <div className='form-control'>
+          <form
+            className='form-control'
+            onSubmit={onSubmit}
+          >
             <input
               type='text'
               placeholder='Search'
               className='input input-bordered'
+              onInput={(event) =>
+                setSearchValue((event.target as HTMLInputElement).value)
+              }
+              value={searchValue}
             />
-          </div>
+          </form>
 
           <div className='flex-none'>
             <Menu>
