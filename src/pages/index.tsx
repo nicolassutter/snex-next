@@ -77,7 +77,7 @@ function Index() {
                   item.poster_path ? (
                     <SwiperSlide
                       key={item.id}
-                      className='h-[unset!important] w-28'
+                      className='swiper-poster-slide'
                     >
                       <Link to={`/media/${category}/${item.id}`}>
                         <PosterCard

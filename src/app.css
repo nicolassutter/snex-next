@@ -81,3 +81,12 @@
   font-size: theme('fontSize.3xl');
   font-weight: theme('fontWeight.bold')
 }
+
+.swiper-notification {
+  display: none;
+}
+
+.swiper-poster-slide {
+  aspect-ratio: 2 / 3;
+  height: unset !important;
+}

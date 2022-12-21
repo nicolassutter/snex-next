@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Link } from 'react-router-dom'
 import { format, differenceInYears } from 'date-fns'
+import { uniqBy } from 'lodash-es'
 
 function Person() {
   const params = useParams()
@@ -35,26 +36,34 @@ function Person() {
     return [
       {
         name: 'Movies as a cast member',
-        items: person?.movie_credits.cast.filter(
-          (credit) => credit.poster_path,
+        items: uniqBy(
+          person?.movie_credits.cast.filter((credit) => credit.poster_path),
+          'id',
         ),
         mediaType: 'movie' satisfies MediaType,
       },
       {
         name: 'Movies as a crew member',
-        items: person?.movie_credits.crew.filter(
-          (credit) => credit.poster_path,
+        items: uniqBy(
+          person?.movie_credits.crew.filter((credit) => credit.poster_path),
+          'id',
         ),
         mediaType: 'movie' satisfies MediaType,
       },
       {
         name: 'Shows as a cast member',
-        items: person?.tv_credits.cast.filter((credit) => credit.poster_path),
+        items: uniqBy(
+          person?.tv_credits.cast.filter((credit) => credit.poster_path),
+          'id',
+        ),
         mediaType: 'tv' satisfies MediaType,
       },
       {
         name: 'Shows as a crew member',
-        items: person?.tv_credits.crew.filter((credit) => credit.poster_path),
+        items: uniqBy(
+          person?.tv_credits.crew.filter((credit) => credit.poster_path),
+          'id',
+        ),
         mediaType: 'tv' satisfies MediaType,
       },
     ] as const
@@ -107,6 +116,7 @@ function Person() {
       <PosterCard
         src={getProfilePicture(person) as string}
         className='relative z-10'
+        lazy={false}
       ></PosterCard>
 
       <div className='content-col w-full overflow-hidden relative p-5'>
@@ -166,7 +176,10 @@ function Person() {
                 }}
               >
                 {slider.items?.map((sliderItem) => (
-                  <SwiperSlide key={`recommendation-${sliderItem.id}`}>
+                  <SwiperSlide
+                    key={`recommendation-${sliderItem.id}`}
+                    className='swiper-poster-slide'
+                  >
                     <Link to={`/media/${slider.mediaType}/${sliderItem.id}`}>
                       <PosterCard
                         src={getPosterPicture(sliderItem) as string}

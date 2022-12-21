@@ -386,7 +386,10 @@ function Media() {
                 }}
               >
                 {slider.items?.map((sliderItem) => (
-                  <SwiperSlide key={`recommendation-${sliderItem.id}`}>
+                  <SwiperSlide
+                    key={`recommendation-${sliderItem.id}`}
+                    className='swiper-poster-slide'
+                  >
                     <Link to={`/media/${mediaType}/${sliderItem.id}`}>
                       <PosterCard
                         src={getPosterPicture(sliderItem) as string}
