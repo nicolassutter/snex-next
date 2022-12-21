@@ -3,11 +3,11 @@ import { api } from '#src/modules/api'
 import { getPosterPicture, getProfilePicture, isPerson } from '#src/utils'
 import type { SearchMovie, SearchShow, SearchPerson } from '#types'
 import { useNavigate } from 'react-router'
-import { Link } from 'react-router-dom'
-import { useSearchParam } from 'react-use'
+import { Link, useSearchParams } from 'react-router-dom'
 
 function Search() {
-  const query = useSearchParam('q')
+  const [searchParams] = useSearchParams()
+  const query = searchParams.get('q')
   const navigate = useNavigate()
   const [results, setResults] = useState<
     (SearchMovie | SearchShow | SearchPerson)[]
