@@ -37,7 +37,7 @@
     width: 100%;
     position: absolute;
     bottom: 0;
-    z-index: theme('zIndex.10');
+    z-index: theme('zIndex.30');
     pointer-events: none;
   }
 }
