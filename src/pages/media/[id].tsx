@@ -239,12 +239,10 @@ function Media() {
             ) : undefined}
 
             {isMovie(media) && media.release_dates?.results?.length ? (
-              <Collapse
-                maxHeight={250}
+              <Releases
                 className='mt-5'
-              >
-                <Releases items={media.release_dates.results}></Releases>
-              </Collapse>
+                items={media.release_dates.results}
+              ></Releases>
             ) : undefined}
 
             <h2 className='section-title mt-16'>People</h2>

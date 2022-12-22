@@ -139,9 +139,9 @@ export function Releases({ items, className }: Props) {
         <label htmlFor={`digital-only-${uid}`}>Digital releases only</label>
       </span>
 
-      <div className='max-w-full overflow-x-auto mt-3'>
-        <table className='table w-full'>
-          <thead>
+      <div className='max-w-full overflow-x-auto mt-3 max-h-72 overflow-y-auto'>
+        <table className='table w-full relative'>
+          <thead className='sticky top-0'>
             <tr>
               {tableHeads.map((option) => {
                 const Tag = option.sortable ? 'button' : 'span'
