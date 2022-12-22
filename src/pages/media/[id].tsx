@@ -259,7 +259,7 @@ function Media() {
                   >
                     <Link to={`/person/${person.id}`}>
                       <LazyImg
-                        className='w-full aspect-[2/3]'
+                        className='w-full aspect-[2/3] rounded-md poster-effect'
                         src={getProfilePicture(person) as string}
                         imgAttrs={{
                           className: 'rounded-md',
