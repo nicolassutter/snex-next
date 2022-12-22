@@ -11,7 +11,7 @@ import {
   isShow,
   md,
 } from '#src/utils/index'
-import type { ImdbData, Movie, Season as ISeason, Show } from '#types'
+import type { ImdbData, Movie, Season as ISeason, Show, Video } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
@@ -26,6 +26,7 @@ function Media() {
   const navigate = useNavigate()
   const [media, setMedia] = useState<null | Movie | Show>()
   const [currentSeason, setCurrentSeason] = useState<ISeason>()
+  const [currentVideo, setCurrentVideo] = useState<Video>()
   const [imdbData, setImdbData] = useState<ImdbData>()
   const [isLoading, setIsLoading] = useState(true)
   const arrPaths = useArrPaths(media)
@@ -34,7 +35,8 @@ function Media() {
   const people = useMediaPeople(media)
   const mediaType = useMediaType()
 
-  const uid = uuid()
+  const seasonModalUid = uuid()
+  const videosModalUid = uuid()
 
   /**
    * Data for the sliders ("Recommended", "Similar")
@@ -112,10 +114,11 @@ function Media() {
         </title>
       </Helmet>
 
+      {/* Season Modal */}
       {currentSeason && media?.id && (
         <Modal
           title={<>{currentSeason.name}</>}
-          id={uid}
+          id={seasonModalUid}
           onClickOutside={() => setCurrentSeason(undefined)}
           onClose={() => setCurrentSeason(undefined)}
         >
@@ -123,6 +126,24 @@ function Media() {
             showId={media?.id}
             season={currentSeason}
           ></Season>
+        </Modal>
+      )}
+
+      {/* Video modal */}
+      {currentVideo && media?.id && (
+        <Modal
+          title={<>{currentVideo.name}</>}
+          id={videosModalUid}
+          onClickOutside={() => setCurrentVideo(undefined)}
+          onClose={() => setCurrentVideo(undefined)}
+        >
+          <iframe
+            className='w-full aspect-video rounded-lg'
+            src={`https://www.youtube.com/embed/${currentVideo.key}`}
+            frameBorder='0'
+            allow='accelerometer; autoplay; picture-in-picture'
+            allowFullScreen
+          />
         </Modal>
       )}
 
@@ -317,12 +338,10 @@ function Media() {
                   >
                     <ul className='trailers-list grid grid-cols-3 gap-5'>
                       {items.map((video) => (
-                        <a
-                          className='poster-effect rounded-lg select-none'
-                          href={`https://www.youtube.com/watch?v=${video.key}`}
-                          target='_blank'
+                        <button
                           key={`video-${video.id}`}
-                          rel='noreferrer'
+                          className='poster-effect rounded-lg select-none'
+                          onClick={() => setCurrentVideo(video)}
                           draggable={false}
                         >
                           <LazyImg
@@ -333,7 +352,7 @@ function Media() {
                             }}
                             alt=''
                           ></LazyImg>
-                        </a>
+                        </button>
                       ))}
                     </ul>
                   </Collapse>
