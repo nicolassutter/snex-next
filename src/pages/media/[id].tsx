@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Releases } from '#src/components/Releases'
+import { LazyImg } from '#src/components/LazyImg'
 import { Link } from 'react-router-dom'
 
 function Media() {
@@ -259,12 +260,18 @@ function Media() {
                     key={`person-${person.id}-${person.department}`}
                   >
                     <Link to={`/person/${person.id}`}>
-                      <img
-                        src={getProfilePicture(person)}
-                        className='rounded-md'
+                      <LazyImg
+                        className='w-full aspect-[2/3]'
+                        src={getProfilePicture(person) as string}
+                        imgAttrs={{
+                          className: 'rounded-md',
+                        }}
+                        loaderAttrs={{
+                          className: 'rounded-md',
+                        }}
                         alt=''
                       />
-                      <p>{person.name}</p>
+                      <p className='font-bold mt-1'>{person.name}</p>
                       <p>{person.job ?? person.character}</p>
                     </Link>
                   </li>
@@ -290,11 +297,14 @@ function Media() {
                           key={`video-${video.id}`}
                           rel='noreferrer'
                         >
-                          <img
+                          <LazyImg
                             className='w-full aspect-video'
                             src={`https://i3.ytimg.com/vi/${video.key}/maxresdefault.jpg`}
+                            imgAttrs={{
+                              className: 'w-full h-full',
+                            }}
                             alt=''
-                          />
+                          ></LazyImg>
                         </a>
                       ))}
                     </ul>
