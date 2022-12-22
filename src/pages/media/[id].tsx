@@ -35,6 +35,10 @@ function Media() {
   const sliders = useMemo(() => {
     return [
       {
+        name: `Seasons`,
+        items: media && isShow(media) ? media.seasons : undefined,
+      },
+      {
         name: 'Recommended',
         items: media?.recommendations.results,
       },
@@ -339,10 +343,16 @@ function Media() {
                   >
                     {slider.items?.map((sliderItem) => (
                       <SwiperSlide
-                        key={`recommendation-${sliderItem.id}`}
+                        key={`slider-item-${sliderItem.id}`}
                         className='swiper-poster-slide'
                       >
-                        <Link to={`/media/${mediaType}/${sliderItem.id}`}>
+                        <Link
+                          to={
+                            slider.name === 'Seasons'
+                              ? `/media/season/${sliderItem.id}`
+                              : `/media/${mediaType}/${sliderItem.id}`
+                          }
+                        >
                           <PosterCard
                             src={getPosterPicture(sliderItem) as string}
                             className='slider-poster-card poster-effect'
