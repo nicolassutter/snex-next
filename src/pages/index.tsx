@@ -97,6 +97,7 @@ function Index() {
                                 imgAttrs={{
                                   className: 'h-full',
                                 }}
+                                lazyClassName='h-full'
                               ></PosterCard>
                             </Link>
                           </SwiperSlide>

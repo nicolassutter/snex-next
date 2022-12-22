@@ -20,7 +20,7 @@ export const LazyImg: FunctionComponent<Props> = ({
   const [hasLoaded, setHasLoaded] = useState(false)
 
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx('relative lazy-img', className)}>
       {!hasLoaded && (
         <span
           {...loaderAttrs}

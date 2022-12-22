@@ -7,6 +7,7 @@ interface Props {
   alt?: string
   imgAttrs?: Omit<JSX.HTMLAttributes<HTMLImageElement>, 'src' | 'alt'>
   className?: string
+  lazyClassName?: string
 }
 
 export const PosterCard: FunctionComponent<Props> = ({
@@ -14,6 +15,7 @@ export const PosterCard: FunctionComponent<Props> = ({
   alt,
   imgAttrs,
   className,
+  lazyClassName,
 }) => {
   return (
     <div
@@ -26,6 +28,7 @@ export const PosterCard: FunctionComponent<Props> = ({
         loaderAttrs={{
           className: 'rounded-md',
         }}
+        className={clsx(lazyClassName)}
         src={src}
         alt={alt}
         imgAttrs={{
