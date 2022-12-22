@@ -282,7 +282,11 @@ function Media() {
                     className={`${person.id}`}
                     key={`person-${person.id}-${person.department}`}
                   >
-                    <Link to={`/person/${person.id}`}>
+                    <Link
+                      to={`/person/${person.id}`}
+                      className='select-none'
+                      draggable={false}
+                    >
                       <LazyImg
                         className='w-full aspect-[2/3] rounded-md poster-effect'
                         src={getProfilePicture(person) as string}
@@ -314,11 +318,12 @@ function Media() {
                     <ul className='trailers-list grid grid-cols-3 gap-5'>
                       {items.map((video) => (
                         <a
-                          className='poster-effect rounded-lg'
+                          className='poster-effect rounded-lg select-none'
                           href={`https://www.youtube.com/watch?v=${video.key}`}
                           target='_blank'
                           key={`video-${video.id}`}
                           rel='noreferrer'
+                          draggable={false}
                         >
                           <LazyImg
                             className='w-full aspect-video'
