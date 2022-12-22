@@ -27,6 +27,9 @@ function Explore() {
   const mediaType = params.mediaType
   const slug = params.slug
 
+  const prevPage = clamp(page - 1, 1, totalPages)
+  const nextPage = clamp(page + 1, page, totalPages)
+
   async function fetchData() {
     setResults([])
     setIsLoading(true)
@@ -70,14 +73,23 @@ function Explore() {
   return (
     <>
       <Helmet>
-        <title>Explore - {capitalize(slug)} | SNEX</title>
+        <title>
+          Explore &gt; {capitalize(slug?.replaceAll('_', ' '))} &gt;{' '}
+          {capitalize(mediaType)} | SNEX
+        </title>
       </Helmet>
 
       {slug && mediaType ? (
         <div className='search-page col-span-full layout-grid'>
           {!isLoading && results.length ? (
             <>
-              <ul className='grid grid-cols-6 gap-5'>
+              <h2 className='capitalize flex flex-center gap-2 text-3xl font-bold'>
+                <span className='capitalize'>{mediaType}</span>
+                <IconNext></IconNext>
+                <span className='capitalize'>{slug.replaceAll('_', ' ')}</span>
+              </h2>
+
+              <ul className='grid grid-cols-6 gap-5 mt-16'>
                 {results.map((media) => (
                   <li key={`media-${media.id}`}>
                     <Link
@@ -104,22 +116,22 @@ function Explore() {
                 `}
               >
                 <Link
-                  to={`${loc.pathname}?page=${clamp(page - 1, 1, totalPages)}`}
+                  to={`${loc.pathname}?page=${prevPage}`}
                   className='btn shadow-lg'
                   aria-label='Go to previous page'
                 >
                   <IconPrev></IconPrev>
+                  <span className='text-lg ml-2'>{prevPage}</span>
                 </Link>
 
+                <span className='self-center text-lg'>{page}</span>
+
                 <Link
-                  to={`${loc.pathname}?page=${clamp(
-                    page + 1,
-                    page,
-                    totalPages,
-                  )}`}
+                  to={`${loc.pathname}?page=${nextPage}`}
                   className='btn shadow-lg'
                   arial-label='Go to next page'
                 >
+                  <span className='text-lg mr-2'>{nextPage}</span>
                   <IconNext></IconNext>
                 </Link>
               </div>
