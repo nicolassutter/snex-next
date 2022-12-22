@@ -1,3 +1,4 @@
+import IconStar from '~icons/carbon/star-filled'
 import { api } from '#src/modules/api'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
@@ -129,7 +130,14 @@ function Media() {
                 </li>
 
                 {/* imdb score */}
-                {imdbData?.score ? <li>{imdbData?.score}</li> : undefined}
+                {imdbData?.score ? (
+                  <li>
+                    <span className='flex items-center'>
+                      {imdbData?.score}
+                      <IconStar className='ml-1 mt-[2px] w-3 grow-0 shrink-0' />
+                    </span>
+                  </li>
+                ) : undefined}
 
                 {/* runtime */}
                 <li>
@@ -162,7 +170,7 @@ function Media() {
               </ul>
             </div>
 
-            <div className='genres mt-3 flex space-x-1 max-w-full overflow-x-auto'>
+            <div className='mt-3 flex space-x-1 max-w-full overflow-x-auto'>
               {media?.genres.map((genre) => (
                 <div
                   key={`genre-${genre.id}`}
