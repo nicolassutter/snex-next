@@ -9,6 +9,7 @@ import Media from './pages/media/[id]'
 import Person from './pages/person/[id]'
 import Search from './pages/search'
 import Settings from './pages/settings'
+import Explore from './pages/explore/[mediaType]/[slug]'
 
 export function App() {
   return (
@@ -38,6 +39,12 @@ export function App() {
                     element: <Media></Media>,
                   },
                 ],
+              },
+              {
+                // /explore/{movie,tv}/{popular,discover,top_rated}
+                // accepts a `page` query param
+                path: '/explore/:mediaType/:slug',
+                element: <Explore></Explore>,
               },
               {
                 path: '/person/:id',

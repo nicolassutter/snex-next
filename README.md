@@ -1,4 +1,4 @@
 ## TODO
 
-- Explore pages
+- Add filters to explorer page
 - Responsive

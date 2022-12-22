@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import { Menu } from '@headlessui/react'
-import IconMenu from '~icons/carbon/overflow-menu-horizontal'
 import { throttle } from 'lodash-es'
+import IconMenu from '~icons/carbon/overflow-menu-horizontal'
+import IconChevronDown from '~icons/carbon/chevron-down'
 
 interface Props {
   className?: string
@@ -20,6 +21,47 @@ export function NavBar({ className }: Props) {
   ])
 
   const [scrollY, setScrollY] = useState(0)
+
+  const [exploreItems] = useState([
+    {
+      name: 'Movie',
+      items: [
+        {
+          title: 'Discover',
+          to: `/explore/movie/discover`,
+        },
+        {
+          title: 'Popular',
+          to: `/explore/movie/popular`,
+        },
+        {
+          title: 'Upcoming',
+          to: `/explore/movie/upcoming`,
+        },
+        {
+          title: 'Top rated',
+          to: `/explore/movie/top_rated`,
+        },
+      ],
+    },
+    {
+      name: 'TV',
+      items: [
+        {
+          title: 'Discover',
+          to: `/explore/tv/discover`,
+        },
+        {
+          title: 'Popular',
+          to: `/explore/tv/popular`,
+        },
+        {
+          title: 'Top rated',
+          to: `/explore/tv/top_rated`,
+        },
+      ],
+    },
+  ] as const)
 
   const onScroll = useCallback(
     throttle(() => {
@@ -54,10 +96,51 @@ export function NavBar({ className }: Props) {
         <div className='flex-1'>
           <Link
             to='/'
-            className='text-3xl tracking-widest uppercase'
+            className='text-3xl tracking-wide uppercase font-semibold'
           >
             SNE<span className='text-blue-500'>X</span>
           </Link>
+
+          <div className='flex items-center ml-10'>
+            {exploreItems.map((exploreItem) => {
+              return (
+                <Menu key={`explore-item-${exploreItem.name}`}>
+                  {() => (
+                    <div className='ui-dropdown'>
+                      <Menu.Button className='btn btn-ghost btn-sm'>
+                        {() => (
+                          <>
+                            {exploreItem.name}{' '}
+                            <IconChevronDown className='ml-1'></IconChevronDown>
+                          </>
+                        )}
+                      </Menu.Button>
+
+                      <Menu.Items className='ui-dropdown-panel'>
+                        {exploreItem.items.map((item) => (
+                          <Menu.Item key={`movie-${item.title}`}>
+                            {
+                              // @ts-expect-error Seems like the lib isn't correctly typed
+                              ({ active }) => (
+                                <Link
+                                  className={clsx('ui-dropdown-item', {
+                                    active,
+                                  })}
+                                  to={item.to}
+                                >
+                                  {item.title}
+                                </Link>
+                              )
+                            }
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </div>
+                  )}
+                </Menu>
+              )
+            })}
+          </div>
         </div>
 
         <div className='flex-none gap-2'>
