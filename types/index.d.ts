@@ -107,6 +107,9 @@ export interface Movie extends Common {
   poster_path: string
   backdrop_path: string
   release_date: string
+  release_dates: {
+    results: Release[]
+  }
 }
 export interface Show extends Common {
   name: string
@@ -177,4 +180,21 @@ export interface ImdbData {
     created_at: string
     updated_at: string
   }[]
+}
+
+export interface SingleRelease {
+  release_date: string
+  country?: string
+  date: string
+  status: { value: boolean; text: string }
+  releaseType?: string
+  id: string
+  type: number
+  flag: string
+  releaseDate: Date
+}
+
+export interface Release {
+  iso_3166_1: string
+  release_dates: SingleRelease[]
 }

@@ -12,6 +12,7 @@ import type { ImdbData, Movie, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
+import { Releases } from '#src/components/Releases'
 import { Link } from 'react-router-dom'
 
 function Media() {
@@ -226,6 +227,15 @@ function Media() {
                 />
                 {isShow(media) ? 'Add to Sonarr' : 'Add to Radarr'}
               </a>
+            ) : undefined}
+
+            {isMovie(media) && media.release_dates?.results?.length ? (
+              <Collapse
+                maxHeight={250}
+                className='mt-5'
+              >
+                <Releases items={media.release_dates.results}></Releases>
+              </Collapse>
             ) : undefined}
 
             <h2 className='section-title mt-16'>People</h2>
