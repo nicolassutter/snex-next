@@ -140,56 +140,68 @@ export function Releases({ items, className }: Props) {
       </span>
 
       <div className='max-w-full overflow-x-auto mt-3'>
-        <table className='w-full'>
-          <tr>
-            {tableHeads.map((option) => {
-              const Tag = option.sortable ? 'button' : 'span'
+        <table className='table w-full'>
+          <thead>
+            <tr>
+              {tableHeads.map((option) => {
+                const Tag = option.sortable ? 'button' : 'span'
 
-              return (
-                <th key={`head-${option.key}`}>
-                  <Tag
-                    className='flex items-baseline'
-                    onClick={() => {
-                      option.sortable && setSortingKey(option.key)
-                    }}
+                return (
+                  <th
+                    key={`head-${option.key}`}
+                    className='capitalize'
                   >
-                    {option.title}
-                    {/* <chevron-up v-if="option.sortable" class="ml-3 transform" :class="{ 'rotate-180': !(reverseSort && sortingKey === option.key) }" /> */}
-                  </Tag>
-                </th>
+                    <Tag
+                      className='flex items-baseline'
+                      onClick={() => {
+                        option.sortable && setSortingKey(option.key)
+                      }}
+                    >
+                      {option.title}
+                      {/* <chevron-up v-if="option.sortable" class="ml-3 transform" :class="{ 'rotate-180': !(reverseSort && sortingKey === option.key) }" /> */}
+                    </Tag>
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+
+          <tbody>
+            {releases.map((release) => {
+              return (
+                <tr
+                  className='hover release-tr'
+                  key={`release-${release.id}`}
+                >
+                  <td className='rounded-l-md'>
+                    <figure className='flex items-center'>
+                      <img
+                        src={release.flag}
+                        alt={release.country}
+                        className='w-6'
+                      />
+
+                      <figcaption className='ml-3'>
+                        {release.country}
+                      </figcaption>
+                    </figure>
+                  </td>
+                  <td>{release.releaseType}</td>
+                  <td>{format(release.releaseDate, 'PPP')}</td>
+                  <td className='rounded-r-md'>
+                    <span
+                      className={clsx('', {
+                        'text-success': release.status.value,
+                        'text-error': !release.status.value,
+                      })}
+                    >
+                      {release.status.text}
+                    </span>
+                  </td>
+                </tr>
               )
             })}
-          </tr>
-
-          {releases.map((release) => {
-            return (
-              <tr key={`release-${release.id}`}>
-                <td>
-                  <figure className='flex items-center'>
-                    <img
-                      src={release.flag}
-                      alt={release.country}
-                      className='w-6'
-                    />
-
-                    <figcaption className='ml-3'>{release.country}</figcaption>
-                  </figure>
-                </td>
-                <td>{release.releaseType}</td>
-                <td>{format(release.releaseDate, 'PPP')}</td>
-                <td>
-                  <span
-                    className={clsx('', {
-                      'text-success': release.status.value,
-                      'text-error': !release.status.value,
-                    })}
-                  >
-                    {release.status.text}
-                  </span>
-                </td>
-              </tr>
-            )
-          })}
+          </tbody>
         </table>
       </div>
     </div>

@@ -23,16 +23,22 @@
 
 .ui-collapse-open {
   padding-bottom: theme('spacing.36');
+
+  &::before {
+    display: none;
+  }
 }
 
 .ui-collapse {
   &::before {
     content: '';
-    height: theme('spacing.36');
+    height: 28%;
     background: linear-gradient(rgba(255, 255, 255, 0.001), theme('colors.base-100'));
     width: 100%;
     position: absolute;
     bottom: 0;
+    z-index: theme('zIndex.10');
+    pointer-events: none;
   }
 }
 
@@ -93,4 +99,9 @@
 .swiper-poster-slide {
   aspect-ratio: 2 / 3;
   height: unset !important;
+}
+
+.release-tr:first-child td {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }

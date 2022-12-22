@@ -39,9 +39,9 @@ export const Collapse: FunctionComponent<PropsWithChildren<Props>> = ({
 
       {/* Not shown if container is smaller than max size */}
       {!isSmaller && (
-        <div className='absolute bottom-5 flex justify-center left-0 right-0'>
+        <div className='absolute bottom-5 flex justify-center left-0 right-0 z-20 pointer-events-none'>
           <button
-            className='btn'
+            className='btn pointer-events-auto'
             onClick={() => setIsOpened((val) => !val)}
           >
             {isOpened ? 'Close' : 'Expand'}
