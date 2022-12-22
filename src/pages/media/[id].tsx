@@ -283,16 +283,19 @@ function Media() {
                   >
                     <ul className='trailers-list grid grid-cols-3 gap-5'>
                       {items.map((video) => (
-                        <li key={`video-${video.id}`}>
-                          <iframe
-                            className='w-full aspect-video rounded-lg'
-                            src={`https://www.youtube.com/embed/${video.key}`}
-                            frameBorder='0'
-                            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                            allowFullScreen
-                            loading='lazy'
+                        <a
+                          className='poster-effect rounded-lg'
+                          href={`https://www.youtube.com/watch?v=${video.key}`}
+                          target='_blank'
+                          key={`video-${video.id}`}
+                          rel='noreferrer'
+                        >
+                          <img
+                            className='w-full aspect-video'
+                            src={`https://i3.ytimg.com/vi/${video.key}/maxresdefault.jpg`}
+                            alt=''
                           />
-                        </li>
+                        </a>
                       ))}
                     </ul>
                   </Collapse>
