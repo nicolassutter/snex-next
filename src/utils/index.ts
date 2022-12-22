@@ -1,6 +1,6 @@
 import type { JSX } from 'preact'
 import MarkdownIt from 'markdown-it'
-import type { Movie, Person, Show } from '#types'
+import type { Movie, Person, Season, Show } from '#types'
 
 export async function makePromise<T extends (...args: any[]) => Promise<any>>(
   cb: T,
@@ -23,6 +23,16 @@ export function isShow(param: Movie | Show | Person): param is Show {
   return (
     'number_of_episodes' in param ||
     ('media_type' in param && param.media_type === 'tv')
+  )
+}
+
+export function isSeason(param: unknown): param is Season {
+  return Boolean(
+    typeof param === 'object' &&
+      param &&
+      'season_number' in param &&
+      'poster_path' in param &&
+      'overview' in param,
   )
 }
 
@@ -50,6 +60,14 @@ export function getPosterPicture<T extends { poster_path?: string | null }>(
 ) {
   return item.poster_path
     ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+    : undefined
+}
+
+export function getStillPicture<T extends { still_path?: string | null }>(
+  item: T,
+) {
+  return item.still_path
+    ? `https://image.tmdb.org/t/p/w500${item.still_path}`
     : undefined
 }
 

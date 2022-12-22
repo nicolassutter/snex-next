@@ -12,48 +12,50 @@ import Settings from './pages/settings'
 
 export function App() {
   return (
-    <div className='layout-grid'>
-      <NavBar className='col-span-full sticky top-0 z-50'></NavBar>
+    <>
+      <div className='layout-grid'>
+        <NavBar className='col-span-full sticky top-0 z-50'></NavBar>
 
-      <main
-        role='main'
-        className='col-span-full layout-grid mt-5'
-      >
-        <Suspense fallback={<></>}>
-          {useRoutes([
-            {
-              path: '/',
-              element: <Index></Index>,
-            },
-            {
-              path: '/media',
-              children: [
-                {
-                  path: tvRoutePatten,
-                  element: <Media></Media>,
-                },
-                {
-                  path: movieRoutePatten,
-                  element: <Media></Media>,
-                },
-              ],
-            },
-            {
-              path: '/person/:id',
-              element: <Person></Person>,
-            },
-            {
-              // `q` query param for search
-              path: '/search',
-              element: <Search></Search>,
-            },
-            {
-              path: '/settings',
-              element: <Settings></Settings>,
-            },
-          ])}
-        </Suspense>
-      </main>
-    </div>
+        <main
+          role='main'
+          className='col-span-full layout-grid mt-5'
+        >
+          <Suspense fallback={<></>}>
+            {useRoutes([
+              {
+                path: '/',
+                element: <Index></Index>,
+              },
+              {
+                path: '/media',
+                children: [
+                  {
+                    path: tvRoutePatten,
+                    element: <Media></Media>,
+                  },
+                  {
+                    path: movieRoutePatten,
+                    element: <Media></Media>,
+                  },
+                ],
+              },
+              {
+                path: '/person/:id',
+                element: <Person></Person>,
+              },
+              {
+                // `q` query param for search
+                path: '/search',
+                element: <Search></Search>,
+              },
+              {
+                path: '/settings',
+                element: <Settings></Settings>,
+              },
+            ])}
+          </Suspense>
+        </main>
+      </div>
+    </>
   )
 }

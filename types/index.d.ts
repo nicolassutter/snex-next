@@ -77,7 +77,7 @@ export interface MediaGenre {
 }
 
 export interface Episode {
-  air_date: string
+  air_date?: string
   episode_number: number
   crew: Cast[]
   guest_stars: Cast[]
@@ -94,7 +94,7 @@ export interface Episode {
 export interface Season {
   _id: string
   air_date: string
-  episodes: Episode[]
+  episodes?: Episode[]
   name: string
   overview: string
   id: number

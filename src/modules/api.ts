@@ -5,6 +5,7 @@ import type {
   SearchMovie,
   SearchPerson,
   SearchShow,
+  Season,
   Show,
 } from '#types'
 import { sortBy } from 'lodash-es'
@@ -180,10 +181,16 @@ export const api = {
     return data
   },
 
-  async getSeason(params: any) {
-    const { showId, seasonId } = params
-    const { data: season } = await $fetch(`/tv/${showId}/season/${seasonId}`)
-
+  async getSeason({
+    showId,
+    seasonNumber,
+  }: {
+    showId: number | string
+    seasonNumber: number
+  }) {
+    const season = await $fetch<Season>(
+      `/tmdb/tv/${showId}/season/${seasonNumber}`,
+    )
     return season
   },
 

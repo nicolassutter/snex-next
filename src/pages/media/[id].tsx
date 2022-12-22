@@ -1,26 +1,31 @@
 import IconStar from '~icons/carbon/star-filled'
 import { api } from '#src/modules/api'
+import { v4 as uuid } from 'uuid'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Mousewheel } from 'swiper'
 import {
   getPosterPicture,
   getProfilePicture,
   isMovie,
+  isSeason,
   isShow,
   md,
 } from '#src/utils/index'
-import type { ImdbData, Movie, Show } from '#types'
+import type { ImdbData, Movie, Season as ISeason, Show } from '#types'
 import { useNavigate, useParams } from 'react-router'
 import { PosterCard } from '#src/components/PosterCard'
 import { Collapse } from '#src/components/Collapse'
 import { Releases } from '#src/components/Releases'
 import { LazyImg } from '#src/components/LazyImg'
 import { Link } from 'react-router-dom'
+import { Modal } from '#src/components/Modal'
+import { Season } from '#src/components/Season'
 
 function Media() {
   const params = useParams()
   const navigate = useNavigate()
   const [media, setMedia] = useState<null | Movie | Show>()
+  const [currentSeason, setCurrentSeason] = useState<ISeason>()
   const [imdbData, setImdbData] = useState<ImdbData>()
   const [isLoading, setIsLoading] = useState(true)
   const arrPaths = useArrPaths(media)
@@ -28,6 +33,8 @@ function Media() {
   const { videosData } = useMediaVideos(media)
   const people = useMediaPeople(media)
   const mediaType = useMediaType()
+
+  const uid = uuid()
 
   /**
    * Data for the sliders ("Recommended", "Similar")
@@ -104,6 +111,20 @@ function Media() {
           {isLoading ? `SNEX` : `${media?.title ?? media?.name} | SNEX`}
         </title>
       </Helmet>
+
+      {currentSeason && media?.id && (
+        <Modal
+          title={<>{currentSeason.name}</>}
+          id={uid}
+          onClickOutside={() => setCurrentSeason(undefined)}
+          onClose={() => setCurrentSeason(undefined)}
+        >
+          <Season
+            showId={media?.id}
+            season={currentSeason}
+          ></Season>
+        </Modal>
+      )}
 
       {!isLoading && media ? (
         <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
@@ -341,28 +362,38 @@ function Media() {
                       1024: { slidesPerView: 6 },
                     }}
                   >
-                    {slider.items?.map((sliderItem) => (
-                      <SwiperSlide
-                        key={`slider-item-${sliderItem.id}`}
-                        className='swiper-poster-slide'
-                      >
-                        <Link
-                          to={
-                            slider.name === 'Seasons'
-                              ? `/media/season/${sliderItem.id}`
-                              : `/media/${mediaType}/${sliderItem.id}`
+                    {slider.items?.map((sliderItem) => {
+                      const Tag = slider.name === 'Seasons' ? 'button' : Link
+                      const props = isSeason(sliderItem)
+                        ? {
+                            onClick: () => {
+                              setCurrentSeason(sliderItem)
+                            },
                           }
+                        : {
+                            to: `/media/${mediaType}/${sliderItem.id}`,
+                          }
+
+                      return (
+                        <SwiperSlide
+                          key={`slider-item-${sliderItem.id}`}
+                          className='swiper-poster-slide'
                         >
-                          <PosterCard
-                            src={getPosterPicture(sliderItem) as string}
-                            className='slider-poster-card poster-effect'
-                            imgAttrs={{
-                              className: 'h-full',
-                            }}
-                          ></PosterCard>
-                        </Link>
-                      </SwiperSlide>
-                    ))}
+                          <Tag
+                            {...props}
+                            className='w-full'
+                          >
+                            <PosterCard
+                              src={getPosterPicture(sliderItem) as string}
+                              className='slider-poster-card poster-effect'
+                              imgAttrs={{
+                                className: 'h-full',
+                              }}
+                            ></PosterCard>
+                          </Tag>
+                        </SwiperSlide>
+                      )
+                    })}
                   </Swiper>
                 </div>
               ) : undefined,
