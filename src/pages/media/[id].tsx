@@ -343,6 +343,7 @@ function Media() {
                           className='poster-effect rounded-lg select-none'
                           onClick={() => setCurrentVideo(video)}
                           draggable={false}
+                          aria-label={`View video "${video.name}"`}
                         >
                           <LazyImg
                             className='w-full aspect-video'

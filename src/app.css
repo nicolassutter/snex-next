@@ -77,8 +77,8 @@
 .poster-effect {
   @apply transition-all border-[3px] border-transparent overflow-hidden;
 
-  &:hover {
-    @apply scale-[0.99] border-accent;
+  &:hover, &:focus-visible {
+    @apply scale-[0.99] border-accent outline-none;
   }
 }
 
