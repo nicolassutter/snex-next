@@ -185,6 +185,7 @@ function ExplorePage({ slug, mediaType }: Props) {
                   <PosterCard
                     className='poster-effect'
                     src={getPosterPicture(media) as string}
+                    lazyClassName='h-full'
                     imgAttrs={{
                       className: 'h-full',
                     }}
