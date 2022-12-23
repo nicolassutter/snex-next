@@ -1,51 +1,72 @@
 import type { JSX } from 'preact'
 import MarkdownIt from 'markdown-it'
 import type { MediaType, Movie, Person, Season, Show, Slug } from '#types'
+import { z } from 'zod'
 
-export async function makePromise<T extends (...args: any[]) => Promise<any>>(
-  cb: T,
-) {
-  return cb()
+const movieShape = z
+  .object({
+    // A movie has a runtime, shows and others do not
+    runtime: z.number().nullable(),
+  })
+  .or(
+    z.object({
+      media_type: z.literal('movie'),
+    }),
+  )
+
+const showShape = z
+  .object({
+    number_of_episodes: z.number(),
+  })
+  .or(
+    z.object({
+      media_type: z.literal('tv'),
+    }),
+  )
+
+const seasonShape = z.object({
+  season_number: z.number(),
+  poster_path: z.number().nullable(),
+  overview: z.string(),
+})
+
+const personShape = z
+  .object({
+    profile_path: z.string().nullable(),
+  })
+  .or(
+    z.object({
+      media_type: z.literal('person'),
+    }),
+  )
+
+const matches = <T>(cb: () => T) => {
+  try {
+    cb()
+    return true
+  } catch (error) {
+    return false
+  }
 }
 
 export function isMovie(param: Movie | Show | Person): param is Movie {
-  return (
-    // A movie cannot have number_of_episodes
-    !('number_of_episodes' in param) &&
-    // Either media_type is not in param
-    (!('media_type' in param) ||
-      // Or media_type is defined and is 'movie'
-      ('media_type' in param && param.media_type === 'movie'))
-  )
+  return matches(() => movieShape.parse(param))
 }
 
 export function isShow(param: Movie | Show | Person): param is Show {
-  return (
-    'number_of_episodes' in param ||
-    ('media_type' in param && param.media_type === 'tv')
-  )
+  return matches(() => showShape.parse(param))
 }
 
 export function isSeason(param: unknown): param is Season {
-  return Boolean(
-    typeof param === 'object' &&
-      param &&
-      'season_number' in param &&
-      'poster_path' in param &&
-      'overview' in param,
-  )
+  return matches(() => seasonShape.parse(param))
 }
 
 export function isPerson(param: Movie | Show | Person): param is Person {
-  return (
-    'profile_path' in param ||
-    ('media_type' in param && param.media_type === 'person')
-  )
+  return matches(() => personShape.parse(param))
 }
 
-export function classesInAttrs(attrs?: JSX.HTMLAttributes<any>) {
-  return clsx(attrs?.class, attrs?.className)
-}
+export const classesInAttrs = (attrs?: JSX.HTMLAttributes<any>) =>
+  clsx(attrs?.class, attrs?.className)
 
 export function getProfilePicture<T extends { profile_path?: string | null }>(
   person: T,
@@ -71,12 +92,10 @@ export function getStillPicture<T extends { still_path?: string | null }>(
     : undefined
 }
 
-export const isMediaType = (param: unknown): param is MediaType => {
-  return (['movie', 'tv'] as MediaType[]).includes(param as any)
-}
+export const isMediaType = (param: unknown): param is MediaType =>
+  (['movie', 'tv'] as MediaType[]).includes(param as any)
 
-export const isValidSlug = (slug: unknown): slug is Slug => {
-  return ['popular', 'top_rated', 'discover', 'upcoming'].includes(slug as any)
-}
+export const isValidSlug = (slug: unknown): slug is Slug =>
+  ['popular', 'top_rated', 'discover', 'upcoming'].includes(slug as any)
 
 export const md = new MarkdownIt()
