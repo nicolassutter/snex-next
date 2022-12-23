@@ -10,16 +10,20 @@ import Person from './pages/person/[id]'
 import Search from './pages/search'
 import Settings from './pages/settings'
 import Explore from './pages/explore/[mediaType]/[slug]'
+import layout from '#src/assets/layout.module.css'
 
 export function App() {
   return (
     <>
-      <div className='layout-grid'>
+      <div className={layout['layout-grid']}>
         <NavBar className='col-span-full sticky top-0 z-50'></NavBar>
 
         <main
           role='main'
-          className='col-span-full layout-grid mt-5'
+          className={clsx(
+            'col-span-full layout-grid mt-5',
+            layout['layout-grid'],
+          )}
         >
           <Suspense fallback={<></>}>
             {useRoutes([

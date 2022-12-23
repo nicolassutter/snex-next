@@ -4,6 +4,7 @@ import { getPosterPicture, getProfilePicture, isPerson } from '#src/utils'
 import type { SearchMovie, SearchShow, SearchPerson } from '#types'
 import { useNavigate } from 'react-router'
 import { Link, useSearchParams } from 'react-router-dom'
+import layout from '#src/assets/layout.module.css'
 
 function Search() {
   const [searchParams] = useSearchParams()
@@ -52,7 +53,7 @@ function Search() {
       {query ? (
         <div className='search-page'>
           {!isLoading && results.length && hasSearched ? (
-            <ul className='grid grid-cols-6 gap-5'>
+            <ul className={clsx(`gap-5`, layout['full-poster-grid'])}>
               {results.map((media) => (
                 <li key={`media-${media.id}`}>
                   <Link

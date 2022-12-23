@@ -5,6 +5,7 @@ import { throttle } from 'lodash-es'
 import IconMenu from '~icons/carbon/overflow-menu-horizontal'
 import IconChevronDown from '~icons/carbon/chevron-down'
 import navbar from './navbar.module.css'
+import layout from '#src/assets/layout.module.css'
 
 interface Props {
   className?: string
@@ -90,9 +91,10 @@ export function NavBar({ className }: Props) {
   return (
     <nav
       className={clsx(
-        'bg-base-100 layout-grid',
+        'bg-base-100',
         { shadow: scrollY > 0 },
         className,
+        layout['layout-grid'],
       )}
     >
       <div className={clsx('navbar py-2 px-0', navbar.nav)}>

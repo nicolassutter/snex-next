@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.layout-grid {
-  /* --grid-gutter: theme('spacing.20'); */
-
-  display: grid;
-  grid-template-columns:
-    minmax(theme('spacing.5'), 1fr)
-    minmax(0, theme('screens.3xl'))
-    minmax(theme('spacing.5'), 1fr)
-  ;
-
-  & > *:not([class*="col-span"]) {
-    grid-column: 2 / 3;
-  }
-}
-
 .col-center {
   grid-column: 2 / 3;
 }

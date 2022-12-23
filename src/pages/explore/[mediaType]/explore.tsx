@@ -10,6 +10,7 @@ import IconNext from '~icons/carbon/chevron-right'
 import { Listbox } from '@headlessui/react'
 import { Fragment } from 'preact/jsx-runtime'
 import IconCheck from '~icons/carbon/checkmark'
+import layout from '#src/assets/layout.module.css'
 
 interface Props {
   mediaType: MediaType
@@ -87,7 +88,7 @@ function ExplorePage({ slug, mediaType }: Props) {
   }, [page])
 
   return (
-    <div className='search-page col-span-full layout-grid'>
+    <div className={clsx('search-page col-span-full', layout['layout-grid'])}>
       <h2 className='capitalize flex flex-center gap-2 text-3xl font-bold'>
         <span className='capitalize'>{mediaType}</span>
         <IconNext></IconNext>
@@ -174,16 +175,7 @@ function ExplorePage({ slug, mediaType }: Props) {
 
       {!isLoading && results.length ? (
         <>
-          <ul
-            className={`
-              grid gap-5 mt-16
-              grid-cols-2
-              sm:grid-cols-3
-              md:grid-cols-4
-              lg:grid-cols-5
-              2xl:grid-cols-6
-            `}
-          >
+          <ul className={clsx(`gap-5 mt-16`, layout['full-poster-grid'])}>
             {results.map((media) => (
               <li key={`media-${media.id}`}>
                 <Link

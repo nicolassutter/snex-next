@@ -1,0 +1,22 @@
+.full-poster-grid {
+  @apply
+    grid
+    grid-cols-2
+    sm:grid-cols-3
+    md:grid-cols-4
+    lg:grid-cols-5
+    2xl:grid-cols-6;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(theme('spacing.5'), 1fr)
+    minmax(0, theme('screens.3xl'))
+    minmax(theme('spacing.5'), 1fr)
+  ;
+
+  & > *:not([class*="col-span"]) {
+    grid-column: 2 / 3;
+  }
+}
