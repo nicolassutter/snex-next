@@ -149,7 +149,7 @@ export function Releases({ items, className }: Props) {
                 return (
                   <th
                     key={`head-${option.key}`}
-                    className='capitalize'
+                    className='capitalize !static'
                   >
                     <Tag
                       className='flex items-baseline'

@@ -1,0 +1,11 @@
+.nav {
+  &[class*="nav"] {
+    display: grid;
+    grid-template-columns: max-content max-content auto;
+    gap: theme('spacing.2');
+
+    @screen sm {
+      grid-template-columns: max-content max-content auto max-content;
+    }
+  }
+}

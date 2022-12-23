@@ -148,10 +148,17 @@ function Media() {
       )}
 
       {!isLoading && media ? (
-        <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
+        <div
+          className={`
+            media-page w-full max-w-full col-center grid gap-5
+            grid-cols-1
+            md:grid-cols-[theme(spacing.48)_1fr]
+            lg:grid-cols-[theme(spacing.72)_1fr]
+        `}
+        >
           <PosterCard
             src={thumbnail}
-            className='relative z-10'
+            className='relative z-10 aspect-[unset] md:aspect-[2/3] max-w-48 md:max-w-[unset]'
           ></PosterCard>
 
           <div className='content-col w-full overflow-hidden relative p-5'>
@@ -243,7 +250,7 @@ function Media() {
                 >
                   <span className='font-bold'>{metaInfo.name}:</span>
 
-                  <ul className='inline-flex ml-2 list-disc'>
+                  <ul className='inline-flex ml-2 list-disc max-w-full overflow-x-auto'>
                     {metaInfo.items.length === 0 && <>-</>}
 
                     {metaInfo.items?.slice(0, 4).map((crewMember) => (
@@ -297,7 +304,15 @@ function Media() {
               maxHeight={500}
               className='mt-5'
             >
-              <ul className='people-list grid grid-cols-6 gap-5'>
+              <ul
+                className={`
+                  people-list grid gap-5
+                  grid-cols-2
+                  sm:grid-cols-3
+                  lg:grid-cols-4
+                  xl:grid-cols-6
+              `}
+              >
                 {people.map((person) => (
                   <li
                     className={`${person.id}`}
@@ -336,7 +351,14 @@ function Media() {
                     maxHeight={500}
                     className='mt-5'
                   >
-                    <ul className='trailers-list grid grid-cols-3 gap-5'>
+                    <ul
+                      className={`
+                        trailers-list grid gap-5
+                        grid-cols-1
+                        sm:grid-cols-2
+                        xl:grid-cols-3
+                      `}
+                    >
                       {items.map((video) => (
                         <button
                           key={`video-${video.id}`}

@@ -174,7 +174,16 @@ function ExplorePage({ slug, mediaType }: Props) {
 
       {!isLoading && results.length ? (
         <>
-          <ul className='grid grid-cols-6 gap-5 mt-16'>
+          <ul
+            className={`
+              grid gap-5 mt-16
+              grid-cols-2
+              sm:grid-cols-3
+              md:grid-cols-4
+              lg:grid-cols-5
+              2xl:grid-cols-6
+            `}
+          >
             {results.map((media) => (
               <li key={`media-${media.id}`}>
                 <Link

@@ -4,6 +4,7 @@ import { Menu } from '@headlessui/react'
 import { throttle } from 'lodash-es'
 import IconMenu from '~icons/carbon/overflow-menu-horizontal'
 import IconChevronDown from '~icons/carbon/chevron-down'
+import navbar from './navbar.module.css'
 
 interface Props {
   className?: string
@@ -25,6 +26,7 @@ export function NavBar({ className }: Props) {
   const [exploreItems] = useState([
     {
       name: 'Movie',
+      className: 'left-0',
       items: [
         {
           title: 'Discover',
@@ -46,6 +48,7 @@ export function NavBar({ className }: Props) {
     },
     {
       name: 'TV',
+      className: 'right-0 xs:right-[unset]',
       items: [
         {
           title: 'Discover',
@@ -92,104 +95,105 @@ export function NavBar({ className }: Props) {
         className,
       )}
     >
-      <div className='navbar p-0'>
-        <div className='flex-1'>
-          <Link
-            to='/'
-            className='text-3xl tracking-wide uppercase font-semibold'
-          >
-            SNE<span className='text-blue-500'>X</span>
-          </Link>
+      <div className={clsx('navbar py-2 px-0', navbar.nav)}>
+        <Link
+          to='/'
+          className='text-3xl tracking-wide uppercase font-semibold'
+        >
+          SNE<span className='text-blue-500'>X</span>
+        </Link>
 
-          <div className='flex items-center ml-10'>
-            {exploreItems.map((exploreItem) => {
-              return (
-                <Menu key={`explore-item-${exploreItem.name}`}>
-                  {() => (
-                    <div className='ui-dropdown'>
-                      <Menu.Button className='btn btn-ghost btn-sm'>
-                        {() => (
-                          <>
-                            {exploreItem.name}{' '}
-                            <IconChevronDown className='ml-1'></IconChevronDown>
-                          </>
-                        )}
-                      </Menu.Button>
+        <div>
+          {exploreItems.map((exploreItem) => {
+            return (
+              <Menu key={`explore-item-${exploreItem.name}`}>
+                {() => (
+                  <div className='ui-dropdown'>
+                    <Menu.Button className='btn btn-ghost btn-sm'>
+                      {() => (
+                        <>
+                          {exploreItem.name}{' '}
+                          <IconChevronDown className='ml-1'></IconChevronDown>
+                        </>
+                      )}
+                    </Menu.Button>
 
-                      <Menu.Items className='ui-dropdown-panel'>
-                        {exploreItem.items.map((item) => (
-                          <Menu.Item key={`movie-${item.title}`}>
-                            {
-                              // @ts-expect-error Seems like the lib isn't correctly typed
-                              ({ active }) => (
-                                <Link
-                                  className={clsx('ui-dropdown-item', {
-                                    active,
-                                  })}
-                                  to={item.to}
-                                >
-                                  {item.title}
-                                </Link>
-                              )
-                            }
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </div>
-                  )}
-                </Menu>
-              )
-            })}
-          </div>
+                    <Menu.Items
+                      className={clsx(
+                        'ui-dropdown-panel',
+                        exploreItem.className,
+                      )}
+                    >
+                      {exploreItem.items.map((item) => (
+                        <Menu.Item key={`movie-${item.title}`}>
+                          {
+                            // @ts-expect-error Seems like the lib isn't correctly typed
+                            ({ active }) => (
+                              <Link
+                                className={clsx('ui-dropdown-item', {
+                                  active,
+                                })}
+                                to={item.to}
+                              >
+                                {item.title}
+                              </Link>
+                            )
+                          }
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </div>
+                )}
+              </Menu>
+            )
+          })}
         </div>
 
-        <div className='flex-none gap-2'>
-          <form
-            className='form-control'
-            onSubmit={onSubmit}
-          >
-            <input
-              type='text'
-              placeholder='Search'
-              className='input input-bordered'
-              onInput={(event) =>
-                setSearchValue((event.target as HTMLInputElement).value)
-              }
-              value={searchValue}
-            />
-          </form>
+        <form
+          className='form-control w-full col-span-full sm:col-[unset]'
+          onSubmit={onSubmit}
+        >
+          <input
+            type='text'
+            placeholder='Search'
+            className='input input-bordered ml-auto w-full sm:w-[unset]'
+            onInput={(event) =>
+              setSearchValue((event.target as HTMLInputElement).value)
+            }
+            value={searchValue}
+          />
+        </form>
 
-          <div className='flex-none'>
-            <Menu>
-              {() => (
-                <div className='ui-dropdown'>
-                  <Menu.Button className='btn'>
-                    {() => <IconMenu></IconMenu>}
-                  </Menu.Button>
+        <div className='col-start-3 row-start-1 ml-auto sm:col-start-[unset] sm:ml-[unset] sm:row-start-[unset]'>
+          <Menu>
+            {() => (
+              <div className='ui-dropdown'>
+                <Menu.Button className='btn'>
+                  {() => <IconMenu></IconMenu>}
+                </Menu.Button>
 
-                  <Menu.Items className='ui-dropdown-panel right-0'>
-                    {items.map((item) => (
-                      <Menu.Item key={item._key}>
-                        {
-                          // @ts-expect-error Seems like the lib isn't correctly typed
-                          ({ active }) => (
-                            <Link
-                              className={clsx('ui-dropdown-item', {
-                                active,
-                              })}
-                              to={item.to}
-                            >
-                              {item.title}
-                            </Link>
-                          )
-                        }
-                      </Menu.Item>
-                    ))}
-                  </Menu.Items>
-                </div>
-              )}
-            </Menu>
-          </div>
+                <Menu.Items className='ui-dropdown-panel right-0'>
+                  {items.map((item) => (
+                    <Menu.Item key={item._key}>
+                      {
+                        // @ts-expect-error Seems like the lib isn't correctly typed
+                        ({ active }) => (
+                          <Link
+                            className={clsx('ui-dropdown-item', {
+                              active,
+                            })}
+                            to={item.to}
+                          >
+                            {item.title}
+                          </Link>
+                        )
+                      }
+                    </Menu.Item>
+                  ))}
+                </Menu.Items>
+              </div>
+            )}
+          </Menu>
         </div>
       </div>
     </nav>

@@ -36,21 +36,34 @@ export function Season({ season, showId, onError }: Props) {
   return (
     <div className='season'>
       {!isLoading ? (
-        <ul className='grid grid-cols-[minmax(0,250px),auto] gap-4'>
-          {fullSeason?.episodes?.map((episode) => {
+        <ul
+          className={`
+            grid gap-4
+            grid-cols-1
+            sm:grid-cols-[minmax(0,250px),auto]
+        `}
+        >
+          {fullSeason?.episodes?.map((episode, index) => {
             return (
               <li
                 key={`season-${season.id}-episode-${episode.id}`}
                 className='contents'
               >
                 {/* Make sure to add a background if the image doesn't load or if there is no image */}
-                <div className='rounded-md aspect-video bg-base-200 overflow-hidden'>
+                <span
+                  className={clsx(
+                    'rounded-md block aspect-video bg-base-200 overflow-hidden',
+                    {
+                      'mt-2 sm:mt-0': index !== 0,
+                    },
+                  )}
+                >
                   <img
                     src={getStillPicture(episode) as string}
                     alt=''
                     className='w-full'
                   />
-                </div>
+                </span>
 
                 <div>
                   <h3 className='font-bold text-lg'>
