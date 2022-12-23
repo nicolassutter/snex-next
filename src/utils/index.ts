@@ -1,6 +1,6 @@
 import type { JSX } from 'preact'
 import MarkdownIt from 'markdown-it'
-import type { MediaType, Movie, Person, Season, Show } from '#types'
+import type { MediaType, Movie, Person, Season, Show, Slug } from '#types'
 
 export async function makePromise<T extends (...args: any[]) => Promise<any>>(
   cb: T,
@@ -73,6 +73,10 @@ export function getStillPicture<T extends { still_path?: string | null }>(
 
 export const isMediaType = (param: unknown): param is MediaType => {
   return (['movie', 'tv'] as MediaType[]).includes(param as any)
+}
+
+export const isValidSlug = (slug: unknown): slug is Slug => {
+  return ['popular', 'top_rated', 'discover', 'upcoming'].includes(slug as any)
 }
 
 export const md = new MarkdownIt()

@@ -6,6 +6,9 @@ module.exports = {
       screens: {
         '3xl': '1920px',
       },
+      maxWidth: ({ theme }) => ({
+        ...theme('spacing'),
+      }),
     },
   },
   plugins: [require('daisyui')],

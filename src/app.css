@@ -59,7 +59,7 @@
   background-color: theme('colors.neutral');
   width: theme('spacing.52');
 
-  @apply shadow-lg rounded-box;
+  @apply shadow-lg rounded-box z-50;
 }
 
 .ui-dropdown-item {

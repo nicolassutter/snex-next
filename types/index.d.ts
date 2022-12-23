@@ -198,3 +198,5 @@ export interface Release {
   iso_3166_1: string
   release_dates: SingleRelease[]
 }
+
+export type Slug = 'popular' | 'top_rated' | 'discover' | 'upcoming'

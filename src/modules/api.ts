@@ -1,5 +1,6 @@
 import type {
   ImdbData,
+  MediaGenre,
   MediaType,
   Movie,
   SearchMovie,
@@ -237,12 +238,16 @@ export const api = {
   },
 
   getMovieGenres: async () => {
-    const { genres } = await $fetch(`/genre/movie/list`)
+    const { genres } = await $fetch<{ genres: MediaGenre[] }>(
+      `/tmdb/genre/movie/list`,
+    )
     return genres
   },
 
   getShowGenres: async () => {
-    const { genres } = await $fetch(`/genre/tv/list`)
+    const { genres } = await $fetch<{ genres: MediaGenre[] }>(
+      `/tmdb/genre/tv/list`,
+    )
     return genres
   },
 }
