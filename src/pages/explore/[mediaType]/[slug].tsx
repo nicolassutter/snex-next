@@ -1,7 +1,7 @@
 import { isMediaType, isValidSlug } from '#src/utils'
 import { capitalize } from 'lodash-es'
 import { useNavigate, useParams } from 'react-router'
-import ExplorePage from './explore'
+import ExplorePage from '#src/components/views/explore'
 
 function Explore() {
   const params = useParams()
