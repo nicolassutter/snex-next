@@ -65,7 +65,9 @@ function ExplorePage({ slug, mediaType }: Props) {
       })
 
       setTotalPages(res.total_pages)
-      setResults(res.results)
+
+      // Only take results with a poster
+      setResults(res.results.filter((result) => result.poster_path))
     } catch (error) {
       navigate('/')
     } finally {
