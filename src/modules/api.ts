@@ -20,16 +20,6 @@ export const $fetch = _$fetch.create({
   baseURL: API_URL,
 })
 
-interface Options {
-  page: number
-  limit: number
-  add: boolean
-  filters?: {
-    genres: { value: string }[]
-    language: { value: string }
-  }
-}
-
 interface GenericRequestQuery {
   page?: number
 }
@@ -157,84 +147,6 @@ export const api = {
     )
 
     return data
-  },
-
-  async getDiscoverShows(options: Partial<Options> = {}) {
-    const params: Options = {
-      page: 1,
-      limit: 20,
-      add: false,
-      ...options,
-    }
-
-    const api_filters: Partial<{
-      with_genres: string
-      with_original_language: string
-    }> = {}
-
-    if (options) {
-      const { filters } = options
-      const { genres: genresFilters, language } = filters || {}
-
-      if (genresFilters) {
-        api_filters.with_genres = genresFilters
-          .map((genre) => genre.value)
-          .toString()
-      }
-
-      if (language) {
-        api_filters.with_original_language = language.value
-      }
-    }
-
-    const { results: shows } = await $fetch(`/discover/tv`, {
-      params: {
-        page: params.page,
-        limit: params.limit,
-        ...api_filters,
-      },
-    })
-
-    return shows
-  },
-
-  async getDiscoverMovies(options: Partial<Options> = {}) {
-    const params: Options = {
-      page: 1,
-      limit: 20,
-      add: false,
-      ...options,
-    }
-
-    const api_filters: Partial<{
-      with_genres: string
-      with_original_language: string
-    }> = {}
-
-    if (options) {
-      const { filters } = options
-      const { genres: genresFilters, language } = filters || {}
-
-      if (genresFilters) {
-        api_filters.with_genres = genresFilters
-          .map((genre) => genre.value)
-          .toString()
-      }
-
-      if (language) {
-        api_filters.with_original_language = language.value
-      }
-    }
-
-    const { results: movies } = await $fetch(`/discover/movie`, {
-      params: {
-        page: params.page,
-        limit: params.limit,
-        ...api_filters,
-      },
-    })
-
-    return movies
   },
 
   getMovieGenres: async () => {
