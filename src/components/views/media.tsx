@@ -161,7 +161,7 @@ function Media() {
             className='relative z-10 aspect-[unset] md:aspect-[2/3] max-w-48 md:max-w-[unset]'
           ></PosterCard>
 
-          <div className='content-col w-full overflow-hidden relative p-5'>
+          <div className='content-col w-full overflow-hidden relative md:p-5'>
             {/* cover image */}
             <img
               className='-z-10 absolute top-0 right-0 left-0 opacity-5 blur-sm w-full'
