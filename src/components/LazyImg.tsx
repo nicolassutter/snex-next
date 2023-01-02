@@ -18,6 +18,7 @@ export const LazyImg: FunctionComponent<Props> = ({
   className,
 }) => {
   const [hasLoaded, setHasLoaded] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
   return (
     <div className={clsx('relative lazy-img', className)}>
@@ -57,7 +58,12 @@ export const LazyImg: FunctionComponent<Props> = ({
         alt={alt}
         draggable={false}
         afterLoad={() => setHasLoaded(true)}
-        className={clsx(classesInAttrs(imgAttrs), 'relative z-20')}
+        onError={() => {
+          setIsVisible(false)
+        }}
+        className={clsx(classesInAttrs(imgAttrs), 'relative z-20', {
+          'opacity-0': !isVisible,
+        })}
       ></LazyLoadImage>
     </div>
   )
