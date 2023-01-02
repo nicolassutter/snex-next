@@ -298,6 +298,7 @@ function Media() {
               ></Releases>
             ) : undefined}
 
+            {/* People grid */}
             <h2 className='section-title mt-16'>People</h2>
 
             <Collapse
@@ -382,6 +383,54 @@ function Media() {
                 </>
               ) : undefined,
             )}
+
+            {/* Reviews grid */}
+            {imdbData?.reviews.length ? (
+              <>
+                <h2 className='section-title mt-16'>Reviews</h2>
+
+                <Collapse
+                  maxHeight={500}
+                  className='mt-5'
+                >
+                  <ul
+                    className={`
+                      reviews-list grid gap-5
+                      grid-cols-1
+                      sm:grid-cols-2
+                      xl:grid-cols-3
+                  `}
+                  >
+                    {imdbData.reviews.map((review) => (
+                      <li
+                        className='card bg-base-200 shadow-md w-full'
+                        key={`review-${review.author}-${review.title}`}
+                      >
+                        <div className='card-body'>
+                          <h3 className='card-title'>
+                            {review.author}
+                            {review.rating || review.rating === 0 ? (
+                              <span className='badge badge-info'>
+                                {review.rating}
+                                <IconStar className='ml-1 w-3 grow-0 shrink-0' />
+                              </span>
+                            ) : undefined}
+                          </h3>
+                          <div
+                            className='mt-2 max-h-72 overflow-y-auto'
+                            dangerouslySetInnerHTML={{
+                              __html: md.render(
+                                review.content?.replaceAll('<br>', '\n') ?? '',
+                              ),
+                            }}
+                          ></div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </Collapse>
+              </>
+            ) : undefined}
 
             {sliders.map((slider) =>
               // Display slider only if it has items
