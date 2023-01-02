@@ -111,7 +111,7 @@ export function NavBar({ className }: Props) {
               <Menu key={`explore-item-${exploreItem.name}`}>
                 {() => (
                   <div className='ui-dropdown'>
-                    <Menu.Button className='btn btn-ghost btn-sm'>
+                    <Menu.Button className='btn btn-ghost btn-sm flex-nowrap'>
                       {() => (
                         <>
                           {exploreItem.name}{' '}
@@ -158,7 +158,7 @@ export function NavBar({ className }: Props) {
           <input
             type='text'
             placeholder='Search'
-            className='input input-bordered ml-auto w-full sm:w-[unset]'
+            className='input input-bordered ml-auto w-full sm:max-w-96'
             onInput={(event) =>
               setSearchValue((event.target as HTMLInputElement).value)
             }
