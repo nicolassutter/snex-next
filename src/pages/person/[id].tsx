@@ -191,6 +191,7 @@ function Person() {
                           <PosterCard
                             src={getPosterPicture(sliderItem) as string}
                             className='slider-poster-card poster-effect'
+                            lazyClassName='h-full'
                             imgAttrs={{
                               className: 'h-full',
                             }}

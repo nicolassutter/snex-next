@@ -71,6 +71,7 @@ function Search() {
                           ? (getProfilePicture(media) as string)
                           : (getPosterPicture(media) as string)
                       }
+                      lazyClassName='h-full'
                       imgAttrs={{
                         className: 'h-full',
                       }}
