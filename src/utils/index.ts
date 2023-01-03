@@ -26,7 +26,7 @@ const showShape = z
 
 const seasonShape = z.object({
   season_number: z.number(),
-  poster_path: z.number().nullable(),
+  poster_path: z.string().nullable(),
   overview: z.string(),
 })
 
