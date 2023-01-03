@@ -328,7 +328,7 @@ function Media() {
                         className='w-full aspect-[2/3] rounded-md poster-effect'
                         src={getProfilePicture(person) as string}
                         imgAttrs={{
-                          className: 'rounded-md',
+                          className: 'rounded-md h-full',
                         }}
                         loaderAttrs={{
                           className: 'rounded-md',
@@ -460,6 +460,7 @@ function Media() {
                   >
                     {slider.items?.map((sliderItem) => {
                       const Tag = slider.name === 'Seasons' ? 'button' : Link
+
                       const props = isSeason(sliderItem)
                         ? {
                             onClick: () => {
