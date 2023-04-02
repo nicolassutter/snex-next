@@ -118,10 +118,19 @@ function Person() {
       </Helmet>
 
       {!isLoading && person ? (
-        <div className='media-page w-full max-w-full col-center grid grid-cols-[300px_1fr] gap-5'>
+        <div
+          className='
+            media-page w-full max-w-full col-center
+            grid
+            grid-cols-1
+            md:grid-cols-[theme(spacing.48)_1fr]
+            lg:grid-cols-[theme(spacing.72)_1fr]
+            gap-5
+          '
+        >
           <PosterCard
             src={getProfilePicture(person) as string}
-            className='relative z-10'
+            className='relative z-10 max-w-max max-h-max'
           ></PosterCard>
 
           <div className='content-col w-full overflow-hidden relative p-5'>
