@@ -1,6 +1,6 @@
 import { api } from '#src/modules/api'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { A11y, Mousewheel } from 'swiper'
+import { A11y, Mousewheel, FreeMode } from 'swiper'
 import { getPosterPicture, getProfilePicture, md } from '#src/utils/index'
 import type { MediaType, Person as IPerson } from '#types'
 import { useNavigate, useParams } from 'react-router'
@@ -170,7 +170,7 @@ function Person() {
                   <h2 className='text-3xl font-bold mt-16'>{slider.name}</h2>
 
                   <Swiper
-                    modules={[A11y, Mousewheel]}
+                    modules={[A11y, Mousewheel, FreeMode]}
                     spaceBetween={15}
                     className='mt-5'
                     mousewheel={{
@@ -187,6 +187,11 @@ function Person() {
                       768: { slidesPerView: 5 },
                       // when window width is >= 1024px
                       1024: { slidesPerView: 6 },
+                    }}
+                    freeMode={{
+                      enabled: true,
+                      momentumRatio: 0.5,
+                      momentumVelocityRatio: 0.5,
                     }}
                   >
                     {slider.items?.map((sliderItem) => (
