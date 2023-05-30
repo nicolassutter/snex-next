@@ -52,7 +52,7 @@ function Index() {
         <title>SNEX</title>
       </Helmet>
 
-      <div className='index-page p-2'>
+      <div className='index-page'>
         {!isLoading ? (
           <>
             {Object.entries(state).map(

@@ -11,10 +11,18 @@
 .layout-grid {
   display: grid;
   grid-template-columns:
-    minmax(theme('spacing.5'), 1fr)
+    minmax(theme('spacing.2'), 1fr)
     minmax(0, theme('screens.3xl'))
-    minmax(theme('spacing.5'), 1fr)
+    minmax(theme('spacing.2'), 1fr)
   ;
+
+  @screen lg {
+    grid-template-columns:
+      minmax(theme('spacing.5'), 1fr)
+      minmax(0, theme('screens.3xl'))
+      minmax(theme('spacing.5'), 1fr)
+    ;
+  }
 
   & > *:not([class*="col-span"]) {
     grid-column: 2 / 3;
