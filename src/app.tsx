@@ -1,7 +1,6 @@
 import { useRoutes } from 'react-router-dom'
 import { NavBar } from './components/NavBar'
 import './app.css'
-import 'swiper/css'
 import { Suspense } from 'preact/compat'
 
 import layout from '#src/assets/layout.module.css'

@@ -1,6 +1,4 @@
 import { PosterCard } from '#src/components/PosterCard'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { A11y, Mousewheel, FreeMode } from 'swiper'
 import { useStore } from '@nanostores/preact'
 import {
   hasFetchedAtom,
@@ -64,36 +62,15 @@ function Index() {
                   >
                     <h2 className='text-3xl font-bold'>{label}</h2>
 
-                    <Swiper
-                      modules={[A11y, Mousewheel, FreeMode]}
-                      spaceBetween={15}
-                      className='mt-5'
-                      mousewheel={{
-                        enabled: true,
-                        forceToAxis: true,
-                      }}
-                      breakpoints={{
-                        0: { slidesPerView: 1 },
-                        // when window width is >= 320px
-                        320: { slidesPerView: 2 },
-                        // when window width is >= 640px
-                        640: { slidesPerView: 4 },
-                        // when window width is >= 768px
-                        768: { slidesPerView: 5 },
-                        // when window width is >= 1024px
-                        1024: { slidesPerView: 6 },
-                      }}
-                      freeMode={{
-                        enabled: true,
-                        momentumRatio: 0.5,
-                        momentumVelocityRatio: 0.5,
-                      }}
-                    >
+                    <div className='overflow-x-auto w-full flex gap-2 min-h-12 mt-5'>
                       {items.map((item) =>
                         item.poster_path ? (
-                          <SwiperSlide
+                          <div
                             key={item.id}
-                            className='swiper-poster-slide'
+                            className={clsx(
+                              'swiper-poster-slide shrink-0 grow-0',
+                              'w-full xs:w-1/2 sm:w-1/4 lg:w-1/5',
+                            )}
                           >
                             <Link to={`/media/${category}/${item.id}`}>
                               <PosterCard
@@ -105,10 +82,10 @@ function Index() {
                                 lazyClassName='h-full'
                               ></PosterCard>
                             </Link>
-                          </SwiperSlide>
+                          </div>
                         ) : undefined,
                       )}
-                    </Swiper>
+                    </div>
                   </div>
                 ),
             )}

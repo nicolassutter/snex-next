@@ -1,8 +1,6 @@
 import IconStar from '~icons/carbon/star-filled'
 import { api } from '#src/modules/api'
 import { v4 as uuid } from 'uuid'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { A11y, Mousewheel, FreeMode } from 'swiper'
 import {
   getPosterPicture,
   getProfilePicture,
@@ -438,31 +436,7 @@ function Media() {
                 <div key={`slider-${slider.name}`}>
                   <h2 className='section-title mt-16'>{slider.name}</h2>
 
-                  <Swiper
-                    modules={[A11y, Mousewheel, FreeMode]}
-                    spaceBetween={15}
-                    className='mt-5'
-                    mousewheel={{
-                      enabled: true,
-                      forceToAxis: true,
-                    }}
-                    breakpoints={{
-                      0: { slidesPerView: 1 },
-                      // when window width is >= 320px
-                      320: { slidesPerView: 2 },
-                      // when window width is >= 640px
-                      640: { slidesPerView: 4 },
-                      // when window width is >= 768px
-                      768: { slidesPerView: 5 },
-                      // when window width is >= 1024px
-                      1024: { slidesPerView: 6 },
-                    }}
-                    freeMode={{
-                      enabled: true,
-                      momentumRatio: 0.5,
-                      momentumVelocityRatio: 0.5,
-                    }}
-                  >
+                  <div className='overflow-x-auto w-full flex gap-2 min-h-12 mt-5'>
                     {slider.items?.map((sliderItem) => {
                       const Tag = slider.name === 'Seasons' ? 'button' : Link
 
@@ -477,9 +451,12 @@ function Media() {
                           }
 
                       return (
-                        <SwiperSlide
+                        <div
                           key={`slider-item-${sliderItem.id}`}
-                          className='swiper-poster-slide'
+                          className={clsx(
+                            'swiper-poster-slide shrink-0 grow-0',
+                            'w-full xs:w-1/2 sm:w-1/4 lg:w-1/5',
+                          )}
                         >
                           <Tag
                             {...props}
@@ -494,10 +471,10 @@ function Media() {
                               }}
                             ></PosterCard>
                           </Tag>
-                        </SwiperSlide>
+                        </div>
                       )
                     })}
-                  </Swiper>
+                  </div>
                 </div>
               ) : undefined,
             )}

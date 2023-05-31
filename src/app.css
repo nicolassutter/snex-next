@@ -68,7 +68,6 @@
 }
 
 .slider-poster-card {
-  height: 100%;
   @apply rounded-md;
 }
 
@@ -83,7 +82,6 @@
 
 .swiper-poster-slide {
   aspect-ratio: 2 / 3;
-  height: unset !important;
 }
 
 .release-tr:first-child td {
