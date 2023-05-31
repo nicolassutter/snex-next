@@ -69,7 +69,7 @@ function Index() {
                             key={item.id}
                             className={clsx(
                               'swiper-poster-slide shrink-0 grow-0',
-                              'w-full xs:w-1/2 sm:w-1/4 lg:w-1/5',
+                              'w-full xxs:w-1/2 sm:w-1/4 lg:w-1/5',
                             )}
                           >
                             <Link to={`/media/${category}/${item.id}`}>
