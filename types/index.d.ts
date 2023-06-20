@@ -57,7 +57,7 @@ interface Common {
   release_date: string
   original_language: string
   genres: MediaGenre[]
-  runtime: number
+  runtime?: number
   videos: {
     results: Video[]
   }

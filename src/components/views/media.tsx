@@ -192,23 +192,34 @@ function Media() {
                 ) : undefined}
 
                 {/* runtime */}
-                <li>
-                  {isMovie(media) && minutesToHuman(media.runtime)}
-                  {isShow(media) && (
-                    <>
-                      {media.episode_run_time.length > 1 ? (
-                        // If there are multiple runtimes of episodes
-                        <>
-                          {minutesToHuman(Math.min(...media.episode_run_time))}-
-                          {minutesToHuman(Math.max(...media.episode_run_time))}
-                        </>
-                      ) : (
-                        // If every episode is the same runtime
-                        <>{minutesToHuman(media.episode_run_time[0])}</>
-                      )}
-                    </>
-                  )}
-                </li>
+
+                {media.runtime !== undefined ||
+                (isShow(media) && media.episode_run_time.length > 0) ? (
+                  <li>
+                    {isMovie(media) &&
+                      media.runtime !== undefined &&
+                      minutesToHuman(media.runtime)}
+                    {isShow(media) && (
+                      <>
+                        {media.episode_run_time.length > 1 ? (
+                          // If there are multiple runtimes of episodes
+                          <>
+                            {minutesToHuman(
+                              Math.min(...media.episode_run_time),
+                            )}
+                            -
+                            {minutesToHuman(
+                              Math.max(...media.episode_run_time),
+                            )}
+                          </>
+                        ) : (
+                          // If every episode is the same runtime
+                          <>{minutesToHuman(media.episode_run_time[0])}</>
+                        )}
+                      </>
+                    )}
+                  </li>
+                ) : undefined}
 
                 {/* seasons count */}
                 {isShow(media) && media.number_of_seasons && (
