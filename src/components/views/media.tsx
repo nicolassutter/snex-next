@@ -307,50 +307,54 @@ function Media() {
               ></Releases>
             ) : undefined}
 
-            {/* People grid */}
-            <h2 className='section-title mt-16'>People</h2>
+            {people.length > 0 && (
+              <>
+                {/* People grid */}
+                <h2 className='section-title mt-16'>People</h2>
 
-            <Collapse
-              maxHeight={500}
-              className='mt-5'
-            >
-              <ul
-                className={`
-                  people-list grid gap-5
-                  grid-cols-2
-                  sm:grid-cols-3
-                  lg:grid-cols-4
-                  xl:grid-cols-6
-              `}
-              >
-                {people.map((person) => (
-                  <li
-                    className={`${person.id}`}
-                    key={`person-${person.id}-${person.department}`}
+                <Collapse
+                  maxHeight={500}
+                  className='mt-5'
+                >
+                  <ul
+                    className={`
+                      people-list grid gap-5
+                      grid-cols-2
+                      sm:grid-cols-3
+                      lg:grid-cols-4
+                      xl:grid-cols-6
+                  `}
                   >
-                    <Link
-                      to={`/person/${person.id}`}
-                      className='select-none'
-                      draggable={false}
-                    >
-                      <LazyImg
-                        className='w-full aspect-[2/3] rounded-md poster-effect'
-                        src={getProfilePicture(person) as string}
-                        imgAttrs={{
-                          className: 'rounded-md h-full',
-                        }}
-                        loaderAttrs={{
-                          className: 'rounded-md',
-                        }}
-                        alt=''
-                      />
-                      <p className='font-bold mt-1'>{person.name}</p>
-                      <p>{person.job ?? person.character}</p>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Collapse>
+                    {people.map((person) => (
+                      <li
+                        className={`${person.id}`}
+                        key={`person-${person.id}-${person.department}`}
+                      >
+                        <Link
+                          to={`/person/${person.id}`}
+                          className='select-none'
+                          draggable={false}
+                        >
+                          <LazyImg
+                            className='w-full aspect-[2/3] rounded-md poster-effect'
+                            src={getProfilePicture(person) as string}
+                            imgAttrs={{
+                              className: 'rounded-md h-full',
+                            }}
+                            loaderAttrs={{
+                              className: 'rounded-md',
+                            }}
+                            alt=''
+                          />
+                          <p className='font-bold mt-1'>{person.name}</p>
+                          <p>{person.job ?? person.character}</p>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </Collapse>
+              </>
+            )}
 
             {videosData.map(({ name, items }) =>
               items?.length ? (
