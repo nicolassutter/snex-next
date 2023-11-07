@@ -25,7 +25,7 @@ interface GenericRequestQuery {
 }
 
 export const api = {
-  getPopularMovies({ page }: GenericRequestQuery = {}) {
+  getPopularMovies({ page = 1 }: GenericRequestQuery = {}) {
     return $fetch<{ results: Movie[] }>('/tmdb/movie/popular', {
       params: {
         page,
@@ -33,7 +33,7 @@ export const api = {
     })
   },
 
-  getTopMovies({ page }: GenericRequestQuery = {}) {
+  getTopMovies({ page = 1 }: GenericRequestQuery = {}) {
     return $fetch<{ results: Movie[] }>('/tmdb/movie/top_rated', {
       params: {
         page,
@@ -41,7 +41,7 @@ export const api = {
     })
   },
 
-  getUpcomingMovies({ page }: GenericRequestQuery = {}) {
+  getUpcomingMovies({ page = 1 }: GenericRequestQuery = {}) {
     return $fetch<{ results: Movie[] }>('/tmdb/movie/upcoming', {
       params: {
         page,
@@ -49,7 +49,7 @@ export const api = {
     })
   },
 
-  getPopularShows({ page }: GenericRequestQuery = {}) {
+  getPopularShows({ page = 1 }: GenericRequestQuery = {}) {
     return $fetch<{ results: Show[] }>('/tmdb/tv/popular', {
       params: {
         page,
@@ -57,7 +57,7 @@ export const api = {
     })
   },
 
-  getTopShows({ page }: GenericRequestQuery = {}) {
+  getTopShows({ page = 1 }: GenericRequestQuery = {}) {
     return $fetch<{ results: Show[] }>('/tmdb/tv/top_rated', {
       params: {
         page,
